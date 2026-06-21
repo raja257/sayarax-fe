@@ -50,16 +50,33 @@ export default function AirportPickupPage() {
   return (
     <div className="min-h-screen overflow-x-hidden bg-slate-50 pb-24">
       {/* HERO */}
-      <section className="relative overflow-hidden rounded-b-[28px] bg-gradient-to-br from-slate-950 via-blue-950 to-blue-600 px-5 pt-6 pb-6 text-white">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-xs text-white/70">Airport Service ✈️</p>
-            <h1 className="mt-1 text-xl font-bold">Airport Pickup</h1>
-          </div>
+  {/* HERO */}
+<section className="relative overflow-hidden rounded-b-[32px] bg-slate-900 px-5 pt-7 pb-8 text-white shadow-lg">
+  {/* Background Accent */}
+  <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-blue-500/20 blur-3xl" />
+  <div className="absolute -left-8 bottom-0 h-24 w-24 rounded-full bg-blue-400/10 blur-2xl" />
 
-          <Plane size={24} />
-        </div>
-      </section>
+  <div className="relative flex items-center justify-between">
+    <div>
+      <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white/80">
+        <Plane size={12} />
+        Airport Service
+      </div>
+
+      <h1 className="text-2xl font-bold tracking-tight">
+        Airport Pickup
+      </h1>
+
+      <p className="mt-1 text-sm text-slate-300">
+        Premium rides with trusted dealerships
+      </p>
+    </div>
+
+    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur">
+      <Plane size={28} className="text-blue-400" />
+    </div>
+  </div>
+</section>
 
       {/* DEALERSHIPS */}
       <section className="mt-6 px-5">
