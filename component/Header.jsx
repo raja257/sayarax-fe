@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { MapPin, User, Bell, Globe, Search } from "lucide-react";
+import { MapPin, Languages, Search, SlidersHorizontal } from "lucide-react";
 import { usePathname } from "next/navigation";
 
-export const Header = ({ hiddenRoutes = [] }) => {
+export const Header = ({ hiddenRoutes = [], onOpenFilters }) => {
   const [lang, setLang] = useState("EN");
   const pathname = usePathname();
   const shouldHide = hiddenRoutes.includes(pathname);
@@ -12,52 +12,50 @@ export const Header = ({ hiddenRoutes = [] }) => {
   if (shouldHide) return null;
 
   return (
-    <header className="sticky top-0 z-50">
-      <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 rounded-b-[30px] shadow-xl">
-        <div className="max-w-7xl mx-auto px-4 pt-5 pb-6">
-          {/* TOP */}
-          <div className="flex justify-between items-start">
-            <div>
-              <p className="text-slate-400 text-sm">Welcome 👋</p>
-
-              <h1 className="text-3xl font-bold text-white mt-1 tracking-wide">
-                SAYARAX
-              </h1>
-
-              <div className="flex items-center gap-1 text-slate-300 mt-1">
-                <MapPin size={14} />
-                <span className="text-sm">Muscat, Oman</span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setLang(lang === "EN" ? "AR" : "EN")}
-                className="w-10 h-10 rounded-xl bg-white/10 border border-white/10 flex items-center justify-center text-white"
-              >
-                <Globe size={18} />
-              </button>
-
-              <button className="w-10 h-10 rounded-xl bg-white/10 border border-white/10 flex items-center justify-center text-white">
-                <Bell size={18} />
-              </button>
-
-              <button className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
-                <User size={18} />
-              </button>
-            </div>
-          </div>
-
-          {/* SEARCH */}
-          <div className="mt-5">
-            <button className="w-full bg-white rounded-2xl h-14 px-4 flex items-center gap-3 shadow-lg">
-              <Search size={20} className="text-slate-400" />
-
-              <span className="text-slate-400 text-sm">
-                Search cars, SUV, luxury...
+    <header className="sticky top-0 z-50 bg-slate-900">
+      <div className="mx-auto max-w-7xl">
+        {/* UTILITY STRIP */}
+        <div className="flex items-center justify-between border-b border-white/8 px-4 py-2.5 sm:px-6 sm:py-2.5 lg:px-8">
+          <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
+            <span className="truncate text-sm font-semibold tracking-tight text-white sm:text-[15px]">
+              Sayarax
+            </span>
+            <span className="text-white/30">&middot;</span>
+            <div className="flex shrink-0 items-center gap-1 text-white/55">
+              <MapPin size={12} className="sm:size-[13px]" />
+              <span className="text-xs sm:text-[13px]">
+                <span className="sm:hidden">Muscat</span>
+                <span className="hidden sm:inline">Muscat, Oman</span>
               </span>
-            </button>
+            </div>
           </div>
+
+          <button
+            onClick={() => setLang(lang === "EN" ? "AR" : "EN")}
+            aria-label="Change language"
+            className="flex h-[26px] shrink-0 items-center gap-1 rounded-lg bg-white/8 px-2.5 text-xs font-medium text-white/80 transition-colors hover:bg-white/12 sm:h-[30px] sm:text-[13px]"
+          >
+            <Languages size={13} className="sm:size-[15px]" />
+            {lang}
+          </button>
+        </div>
+
+        {/* SEARCH + FILTER */}
+        <div className="flex gap-2 px-4 py-3.5 sm:max-w-[540px] sm:px-6 lg:px-8">
+          <button className="flex h-[46px] min-w-0 flex-1 items-center gap-2.5 rounded-2xl bg-white/8 px-3.5 transition-colors hover:bg-white/12">
+            <Search size={17} className="shrink-0 text-white/40" />
+            <span className="truncate text-left text-[13.5px] text-white/45">
+              Search cars, SUV, luxury&hellip;
+            </span>
+          </button>
+
+          <button
+            onClick={onOpenFilters}
+            aria-label="Open filters"
+            className="flex h-[46px] w-[46px] shrink-0 items-center justify-center rounded-2xl bg-blue-600 transition-colors hover:bg-blue-500"
+          >
+            <SlidersHorizontal size={18} className="text-white" />
+          </button>
         </div>
       </div>
     </header>
