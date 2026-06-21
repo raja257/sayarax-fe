@@ -51,7 +51,7 @@ export default function AirportPickupPage() {
     <div className="min-h-screen bg-slate-50 pb-24 overflow-x-hidden">
 
       {/* HERO */}
-      <section className="relative overflow-hidden rounded-b-[28px] bg-gradient-to-br from-slate-950 via-blue-950 to-blue-600 px-5 pt-6 pb-6 text-white">
+      <section className="bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 rounded-b-[30px] shadow-xl px-5 py-6">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-xs text-white/70">Airport Service ✈️</p>
