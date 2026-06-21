@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import {
   Calendar,
+  Filter,
   Fuel,
   MapPin,
   MessageCircle,
@@ -104,102 +105,16 @@ export default function CarPlatform() {
     window.location.href = `tel:${num}`;
   };
 
-  // ✅ GRID CARD
-  const GridCard = ({ car }) => (
-    <div className="bg-white border rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
-      <img src={car.images.exterior[0]} className="w-full h-56 object-cover" />
 
-      <div className="p-5 space-y-3">
-        <h3 className="text-xl font-medium text-[#111827]">{car.name}</h3>
-
-        <p className="text-sm text-[#6b7280] flex items-center gap-2">
-          <MapPin size={14} />
-          {car.dealer} • {car.location}
-        </p>
-
-        <div className="text-sm text-[#4b5563] flex gap-4">
-          <span>⛽ {car.fuel}</span>
-          <span>⚙ {car.transmission}</span>
-          <span>📅 {car.year}</span>
-        </div>
-
-        <div className="flex gap-2 text-xs">
-          <span className="bg-gray-100 px-2 py-1 rounded">
-            Daily: {car.pricing.daily}
-          </span>
-        </div>
-
-        <div className="flex gap-3 pt-2">
-          <button
-            onClick={() => openWhatsApp(car.whatsapp)}
-            className="flex-1 bg-green-500 text-white py-2 rounded-lg text-sm"
-          >
-            WhatsApp
-          </button>
-
-          <button
-            onClick={() => callNow(car.phone)}
-            className="flex-1 border py-2 rounded-lg text-sm"
-          >
-            Call
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
-  // ✅ LIST CARD
-  const ListCard = ({ car }) => (
-    <div className="bg-white border rounded-2xl shadow-sm hover:shadow-md transition flex flex-col md:flex-row overflow-hidden">
-      <img
-        src={car.images.exterior[0]}
-        className="w-full md:w-72 h-56 object-cover"
-      />
-
-      <div className="p-5 flex-1 space-y-3">
-        <h3 className="text-lg font-medium text-[#111827]">{car.name}</h3>
-
-        <p className="text-sm text-[#6b7280] flex items-center gap-2">
-          <MapPin size={14} />
-          {car.dealer} • {car.location}
-        </p>
-
-        <div className="text-sm text-[#4b5563] flex gap-4">
-          <span>⛽ {car.fuel}</span>
-          <span>⚙ {car.transmission}</span>
-          <span>📅 {car.year}</span>
-        </div>
-
-        <div className="flex gap-2 text-xs">
-          <span className="bg-gray-100 px-2 py-1 rounded">
-            Daily: {car.pricing.daily}
-          </span>
-        </div>
-
-        <div className="flex gap-3 pt-2">
-          <button
-            onClick={() => openWhatsApp(car.whatsapp)}
-            className="flex-1 bg-green-500 text-white py-2 rounded-lg text-sm"
-          >
-            WhatsApp
-          </button>
-
-          <button
-            onClick={() => callNow(car.phone)}
-            className="flex-1 border py-2 rounded-lg text-sm"
-          >
-            Call
-          </button>
-        </div>
-      </div>
-    </div>
-  );
 
   return (
     <section className="mt-4 p-1 bg-[#f9fafb] min-h-screen">
       {/* HEADER */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-light text-[#111827]"></h2>
+        <h2 className="text-2xl font-light text-[#111827]"><button className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm shadow-sm">
+            <Filter size={15} />
+            Filters
+          </button></h2>
 
         {/* TOGGLE */}
         <div className="flex border rounded-xl bg-white p-1">
@@ -225,139 +140,140 @@ export default function CarPlatform() {
 
       {/* CONTENT */}
       {viewMode === "grid" ? (
-       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-  {cars.map((car) => (
-    <div
-      key={car.id}
-      className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-200"
-    >
-      <div className="relative">
-        <img
-          src={car.images.exterior[0]}
-          alt={car.name}
-          className="w-full h-56 object-cover"
-        />
-        <span className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-xs font-medium text-gray-700 px-2.5 py-1 rounded-md shadow-sm">
-          {car.year}
-        </span>
-      </div>
-
-      <div className="p-5 space-y-3">
-        <h3 className="text-lg font-semibold text-gray-900 truncate">
-          {car.name}
-        </h3>
-
-        <p className="text-sm text-gray-500 flex items-center gap-1.5 truncate">
-          <MapPin size={14} className="shrink-0" />
-          <span className="truncate">
-            {car.dealer} &middot; {car.location}
-          </span>
-        </p>
-
-        <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-gray-600 pt-1">
-          <span className="flex items-center gap-1.5">
-            <Fuel size={14} />
-            {car.fuel}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <Settings size={14} />
-            {car.transmission}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <Calendar size={14} />
-            {car.year}
-          </span>
-        </div>
-
-        <div className="flex items-baseline justify-between pt-2 border-t border-gray-100">
-          <div>
-            <span className="text-lg font-semibold text-gray-900">
-              {car.pricing.daily}
-            </span>
-            <span className="text-xs text-gray-500"> / day</span>
-          </div>
-        </div>
-
-        <div className="flex gap-2 pt-1">
-          <button className="flex-1 flex items-center justify-center gap-1.5 bg-[#25D366] hover:bg-[#1ebd58] text-white text-xs font-medium px-3 py-2.5 rounded-lg transition-colors">
-            <MessageCircle size={14} />
-            WhatsApp
-          </button>
-          <button className="flex-1 flex items-center justify-center gap-1.5 border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-medium px-3 py-2.5 rounded-lg transition-colors">
-            <Phone size={14} />
-            Call
-          </button>
-        </div>
-      </div>
-    </div>
-  ))}
-</div>
-      ) : (
-        // ✅ LIST VIEW (2 POSTS PER ROW)
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {cars.map((car) => (
             <div
               key={car.id}
-              className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-200 flex overflow-hidden"
+              className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-200"
+            >
+              <div className="relative">
+                <img
+                  src={car.images.exterior[0]}
+                  alt={car.name}
+                  className="w-full h-56 object-cover"
+                />
+                <span className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-xs font-medium text-gray-700 px-2.5 py-1 rounded-md shadow-sm">
+                  {car.year}
+                </span>
+              </div>
+
+              <div className="p-5 space-y-3">
+                <h3 className="text-lg font-semibold text-gray-900 truncate">
+                  {car.name}
+                </h3>
+
+                <p className="text-sm text-gray-500 flex items-center gap-1.5 truncate">
+                  <MapPin size={14} className="shrink-0" />
+                  <span className="truncate">
+                    {car.dealer} &middot; {car.location}
+                  </span>
+                </p>
+
+                <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-gray-600 pt-1">
+                  <span className="flex items-center gap-1.5">
+                    <Fuel size={14} />
+                    {car.fuel}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Settings size={14} />
+                    {car.transmission}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Calendar size={14} />
+                    {car.year}
+                  </span>
+                </div>
+
+                <div className="flex items-baseline justify-between pt-2 border-t border-gray-100">
+                  <div>
+                    <span className="text-lg font-semibold text-gray-900">
+                      {car.pricing.daily}
+                    </span>
+                    <span className="text-xs text-gray-500"> / day</span>
+                  </div>
+                </div>
+
+                <div className="flex gap-2 pt-1">
+                  <button className="flex-1 flex items-center justify-center gap-1.5 bg-[#25D366] hover:bg-[#1ebd58] text-white text-xs font-medium px-3 py-2.5 rounded-lg transition-colors">
+                    <MessageCircle size={14} />
+                    WhatsApp
+                  </button>
+                  <button className="flex-1 flex items-center justify-center gap-1.5 border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-medium px-3 py-2.5 rounded-lg transition-colors">
+                    <Phone size={14} />
+                    Call
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        // ✅ LIST VIEW (2 POSTS PER ROW)
+        <div className="flex flex-col gap-3">
+          {cars.map((car) => (
+            <div
+              key={car.id}
+              className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-200 flex overflow-hidden h-32 sm:h-36"
             >
               {/* IMAGE */}
-              <div className="relative w-40 md:w-48 shrink-0">
+              <div className="relative w-24 sm:w-32 md:w-40 shrink-0 h-full">
                 <img
                   src={car.images.exterior[0]}
                   alt={car.name}
                   className="w-full h-full object-cover"
                 />
-                <span className="absolute top-2 left-2 bg-white/95 backdrop-blur-sm text-[11px] font-medium text-gray-700 px-2 py-0.5 rounded-md shadow-sm">
+                <span className="absolute top-1.5 left-1.5 bg-white/95 backdrop-blur-sm text-[10px] font-medium text-gray-700 px-1.5 py-0.5 rounded-md shadow-sm">
                   {car.year}
                 </span>
               </div>
 
               {/* CONTENT */}
-              <div className="p-4 flex-1 flex flex-col justify-between min-w-0">
-                <div className="space-y-2">
-                  <h3 className="text-base font-semibold text-gray-900 truncate">
+              <div className="px-3 sm:px-4 py-2.5 flex-1 flex flex-col justify-between min-w-0">
+                <div className="min-w-0">
+                  <h3 className="text-sm sm:text-base font-semibold text-gray-900 truncate">
                     {car.name}
                   </h3>
-
-                  <p className="text-sm text-gray-500 flex items-center gap-1.5">
-                    <MapPin size={14} className="shrink-0" />
+                  <p className="text-xs sm:text-sm text-gray-500 truncate flex items-center gap-1 mt-0.5">
+                    <MapPin size={12} className="shrink-0" />
                     <span className="truncate">{car.dealer}</span>
                   </p>
 
-                  <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-gray-600 pt-1">
+                  <div className="flex gap-2.5 text-[11px] sm:text-xs text-gray-600 mt-1.5">
                     <span className="flex items-center gap-1">
-                      <Fuel size={13} />
+                      <Fuel size={12} />
                       {car.fuel}
                     </span>
-                    <span className="flex items-center gap-1">
-                      <Settings2 size={13} />
+                    <span className="hidden sm:flex items-center gap-1">
+                      <Settings2 size={12} />
                       {car.transmission}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Calendar size={13} />
-                      {car.year}
                     </span>
                   </div>
                 </div>
 
-                <div className="space-y-3 pt-3">
-                  <div className="flex items-baseline justify-between">
-                    <div>
-                      <span className="text-lg font-semibold text-gray-900">
-                        {car.pricing.daily}
-                      </span>
-                      <span className="text-xs text-gray-500"> / day</span>
-                    </div>
+                <div className="flex items-center justify-between gap-2 pt-1.5">
+                  <div className="flex items-baseline gap-1 shrink-0">
+                    <span className="text-sm sm:text-base font-semibold text-gray-900">
+                      {car.pricing.daily}
+                    </span>
+                    <span className="text-[10px] sm:text-xs text-gray-500">
+                      /day
+                    </span>
                   </div>
 
-                  <div className="flex gap-2">
-                    <button className="flex-1 flex items-center justify-center gap-1.5 bg-[#25D366] hover:bg-[#1ebd58] text-white text-xs font-medium px-3 py-2 rounded-lg transition-colors">
-                      <MessageCircle size={14} />
-                      WhatsApp
+                  <div className="flex gap-1.5 shrink-0">
+                    <button
+                      aria-label="Contact via WhatsApp"
+                      className="flex items-center justify-center gap-1 bg-[#25D366] hover:bg-[#1ebd58] text-white text-xs font-medium px-2 sm:px-3 py-1.5 rounded-lg transition-colors"
+                    >
+                      <MessageCircle size={13} />
+                      <span className="hidden sm:inline">WhatsApp</span>
                     </button>
-                    <button className="flex-1 flex items-center justify-center gap-1.5 border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-medium px-3 py-2 rounded-lg transition-colors">
-                      <Phone size={14} />
-                      Call
+                    <button
+                      aria-label="Call dealer"
+                      className="flex items-center justify-center gap-1 border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-medium px-2 sm:px-3 py-1.5 rounded-lg transition-colors"
+                    >
+                      <Phone size={13} />
+                      <span className="hidden sm:inline">Call</span>
                     </button>
                   </div>
                 </div>

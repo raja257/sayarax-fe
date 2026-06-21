@@ -270,16 +270,14 @@ export default function AirportPickupPage() {
 
       {/* AVAILABLE CARS */}
       <section className="mt-8 px-5">
-        <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-slate-900">
-            Available Cars
-          </h2>
+        {/* <div className="mb-3 flex items-center justify-between">
+          
 
           <button className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm shadow-sm">
             <Filter size={15} />
             Filters
           </button>
-        </div>
+        </div> */}
 
         <FeaturedCars
           selectedBody={selectedBody}
