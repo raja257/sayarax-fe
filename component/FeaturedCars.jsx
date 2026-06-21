@@ -121,8 +121,8 @@ export default function CarPlatform() {
     setSelectedCar(car);
     setActiveView(view);
   };
-
-  const images =
+ 
+  const images = 
     activeView === "interior"
       ? selectedCar?.images?.interior || []
       : selectedCar?.images?.exterior || [];
@@ -140,9 +140,9 @@ export default function CarPlatform() {
       {/* GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        {cars.map((car) => (
+        {cars.map((car,i) => (
           <div
-            key={car.id}
+            key={i}
             className="bg-white rounded-2xl shadow-sm border overflow-hidden hover:shadow-md transition"
           >
 

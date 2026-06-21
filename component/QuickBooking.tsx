@@ -33,7 +33,7 @@ export default function BookingOptions() {
   const [returnDate, setReturnDate] = useState(todayISO);
 
   const goToBooking = (href:any) => {
-    router.push(`${href}?pickup=${pickupDate}&return=${returnDate}&location=Muscat`);
+    router.push(`options`);
   };
 
   return (

@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <div className="min-h-screen text-textPrimary dark:text-slate-200">
-          <Header />
+          <Header hiddenRoutes={["/options"] as any}/>
 
           {/* Mobile Search (conditionally hidden on some routes) */}
           {/* <SearchWrapper hiddenRoutes={["/reels", ]} /> */}
