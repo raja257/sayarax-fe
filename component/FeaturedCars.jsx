@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from "react";
 import {
+  ArrowUpDown,
   Calendar,
+  Check,
+  ChevronDown,
   Filter,
   Fuel,
   MapPin,
@@ -24,19 +27,10 @@ const carsData = [
     transmission: "Automatic",
     fuel: "14 km/l",
     year: 2021,
-    pricing: {
-      daily: "12 OMR",
-      weekly: "70 OMR",
-      monthly: "250 OMR",
-    },
-    services: {
-      insurance: true,
-      delivery: true,
-    },
-    images: {
-      exterior: ["/car.jpeg"],
-      interior: ["/car.jpeg"],
-    },
+    pricing: { daily: "12 OMR", weekly: "70 OMR", monthly: "250 OMR" },
+    services: { insurance: true, delivery: true },
+    images: { exterior: ["/car.jpeg"], interior: ["/car.jpeg"] },
+    dailyNum: 12,
   },
   {
     id: 2,
@@ -48,19 +42,10 @@ const carsData = [
     transmission: "Automatic",
     fuel: "10 km/l",
     year: 2022,
-    pricing: {
-      daily: "45 OMR",
-      weekly: "250 OMR",
-      monthly: "900 OMR",
-    },
-    services: {
-      insurance: false,
-      delivery: true,
-    },
-    images: {
-      exterior: ["/car.jpeg"],
-      interior: ["/car.jpeg"],
-    },
+    pricing: { daily: "45 OMR", weekly: "250 OMR", monthly: "900 OMR" },
+    services: { insurance: false, delivery: true },
+    images: { exterior: ["/car.jpeg"], interior: ["/car.jpeg"] },
+    dailyNum: 45,
   },
   {
     id: 3,
@@ -72,75 +57,109 @@ const carsData = [
     transmission: "Automatic",
     fuel: "9 km/l",
     year: 2023,
-    pricing: {
-      daily: "50 OMR",
-      weekly: "300 OMR",
-      monthly: "1100 OMR",
-    },
-    services: {
-      insurance: true,
-      delivery: true,
-    },
-    images: {
-      exterior: ["/car.jpeg"],
-      interior: ["/car.jpeg"],
-    },
+    pricing: { daily: "50 OMR", weekly: "300 OMR", monthly: "1100 OMR" },
+    services: { insurance: true, delivery: true },
+    images: { exterior: ["/car.jpeg"], interior: ["/car.jpeg"] },
+    dailyNum: 50,
   },
+];
+
+const SORT_OPTIONS = [
+  { label: "Price: Low to High", value: "price_asc" },
+  { label: "Price: High to Low", value: "price_desc" },
+  { label: "Newest First", value: "year_desc" },
+  { label: "Oldest First", value: "year_asc" },
 ];
 
 export default function CarPlatform() {
   const [cars, setCars] = useState([]);
   const [selectedCar, setSelectedCar] = useState(null);
-  const [viewMode, setViewMode] = useState("grid");
+  const [viewMode, setViewMode] = useState("list");
+  const [sortBy, setSortBy] = useState("price_asc");
+  const [sortOpen, setSortOpen] = useState(false);
 
   useEffect(() => {
     setCars(carsData);
   }, []);
 
-  const openWhatsApp = (num) => {
-    window.open(`https://wa.me/${num}`, "_blank");
-  };
+  const sortedCars = [...cars].sort((a, b) => {
+    if (sortBy === "price_asc") return a.dailyNum - b.dailyNum;
+    if (sortBy === "price_desc") return b.dailyNum - a.dailyNum;
+    if (sortBy === "year_desc") return b.year - a.year;
+    if (sortBy === "year_asc") return a.year - b.year;
+    return 0;
+  });
 
-  const callNow = (num) => {
-    window.location.href = `tel:${num}`;
-  };
+  const activeSortLabel = SORT_OPTIONS.find((o) => o.value === sortBy)?.label;
+
+  const openWhatsApp = (num) => window.open(`https://wa.me/${num}`, "_blank");
+  const callNow = (num) => (window.location.href = `tel:${num}`);
 
   return (
-    <section className="mt-4 p-0a bg-[#f9fafb] min-h-screen">
-      {/* HEADER */}
-      <div className="flex items-center justify-between mb-6">
-        <button className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm shadow-sm">
+    <section className="mt-4 px-1 bg-[#f9fafb] min-h-screen">
+      {/* ── TOOLBAR ── */}
+      <div className="flex items-left justify-end mb-6 gap-3">
+        {/* LEFT: Filter icon button */}
+        <button className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm hover:bg-slate-50 transition-colors">
           <Filter size={15} />
           Filters
         </button>
 
-        {/* TOGGLE */}
-        <div className="flex border rounded-xl bg-white p-1">
+        {/* RIGHT: Sort dropdown */}
+        <div className="relative">
           <button
-            onClick={() => setViewMode("grid")}
-            className={`px-4 py-2 text-sm rounded-lg ${
-              viewMode === "grid" ? "bg-black text-white" : "text-gray-600"
-            }`}
+            onClick={() => setSortOpen((v) => !v)}
+            className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm hover:bg-slate-50 transition-colors"
           >
-            Grid
+            <ArrowUpDown size={15} className="text-slate-500" />
+            <span className="hidden sm:inline">{activeSortLabel}</span>
+            <span className="sm:hidden">Sort</span>
+            <ChevronDown
+              size={14}
+              className={`text-slate-400 transition-transform duration-200 ${
+                sortOpen ? "rotate-180" : ""
+              }`}
+            />
           </button>
 
-          <button
-            onClick={() => setViewMode("list")}
-            className={`px-4 py-2 text-sm rounded-lg ${
-              viewMode === "list" ? "bg-black text-white" : "text-gray-600"
-            }`}
-          >
-            List
-          </button>
+          {sortOpen && (
+            <>
+              {/* backdrop */}
+              <div
+                className="fixed inset-0 z-10"
+                onClick={() => setSortOpen(false)}
+              />
+              {/* dropdown */}
+              <div className="absolute right-0 top-full mt-2 z-20 w-52 rounded-2xl border border-slate-200 bg-white shadow-lg overflow-hidden">
+                {SORT_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => {
+                      setSortBy(opt.value);
+                      setSortOpen(false);
+                    }}
+                    className={`w-full flex items-center justify-between px-4 py-3 text-sm text-left transition-colors hover:bg-slate-50 ${
+                      sortBy === opt.value
+                        ? "text-blue-600 font-medium"
+                        : "text-slate-700"
+                    }`}
+                  >
+                    {opt.label}
+                    {sortBy === opt.value && (
+                      <Check size={14} className="text-blue-600 shrink-0" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </div>
 
-      {/* CONTENT */}
+      {/* ── CONTENT ── */}
       {viewMode === "grid" ? (
-        /* ── GRID VIEW: 2 cols on mobile, 3 on desktop ── */
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
-          {cars.map((car) => (
+          {sortedCars.map((car) => (
             <div
               key={car.id}
               className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-200"
@@ -187,8 +206,7 @@ export default function CarPlatform() {
                       {car.pricing.daily}
                     </span>
                     <span className="text-[10px] sm:text-xs text-gray-500">
-                      {" "}
-                      / day
+                      {" "}/ day
                     </span>
                   </div>
                 </div>
@@ -216,9 +234,8 @@ export default function CarPlatform() {
           ))}
         </div>
       ) : (
-        /* ── LIST VIEW: 2 cols on mobile (stacked card), 1 col row on desktop ── */
-        <div className="grid grid-cols-2 gap-3 lg:grid-cols-1 lg:gap-3">
-          {cars.map((car) => (
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols- lg:gap-3">
+          {sortedCars.map((car) => (
             <div
               key={car.id}
               className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-200 flex flex-col lg:flex-row overflow-hidden lg:h-36"
@@ -303,12 +320,10 @@ export default function CarPlatform() {
             >
               <X size={18} />
             </button>
-
             <img
               src={selectedCar.images.exterior[0]}
               className="w-full h-[420px] object-cover"
             />
-
             <div className="p-6 space-y-3">
               <h3 className="text-lg font-medium">{selectedCar.name}</h3>
               <p className="text-sm text-gray-500 flex items-center gap-2">
