@@ -2,7 +2,7 @@
 
 import QuickBookingCard from "./component/QuickBooking";
 import PopularCategories from "./component/PopularCategories";
-// import FeaturedCars from "./component/FeaturedCars";
+import FeaturedCars from "./component/FeaturedCars";
 // import MonthlyRentalBanner from "./component/MonthlyRentalBanner";
 // import NearbyDealerships from "./component/NearbyDealerships";
 // import HotDeals from "./component/HotDeals";
@@ -16,7 +16,7 @@ export default function HomePage() {
         <PopularCategories />
       </div>
 
-      {/* <FeaturedCars /> */}
+      <FeaturedCars />
       {/* <MonthlyRentalBanner /> */}
       {/* <NearbyDealerships /> */}
       {/* <HotDeals /> */}
