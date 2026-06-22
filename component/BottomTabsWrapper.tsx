@@ -22,7 +22,6 @@ export default function BottomTabsWrapper({
       <div className="flex justify-around py-3">
         <BottomTab icon={<Home />} label="Home" active />
         <BottomTab icon={<Car />} label="Feed" />
-        {/* <BottomTab icon={<Heart />} label="Saved" /> */}
         <BottomTab icon={<User />} label="Profile" />
       </div>
     </nav>
