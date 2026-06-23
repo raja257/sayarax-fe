@@ -96,7 +96,7 @@ export default function CarPlatform() {
   const callNow = (num) => (window.location.href = `tel:${num}`);
 
   return (
-    <section className="mt-4 px-1 bg-[#f9fafb] min-h-screen">
+    <section className="mt-4 px-1 bg-[#f9fafb] ">
       {/* ── TOOLBAR ── */}
       <div className="flex items-left justify-end mb-6 gap-3">
         {/* LEFT: Filter icon button */}
