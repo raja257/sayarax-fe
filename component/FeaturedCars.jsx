@@ -6,6 +6,8 @@ import {
   Calendar,
   Check,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Filter,
   Fuel,
   MapPin,
@@ -13,6 +15,7 @@ import {
   Phone,
   Settings,
   Settings2,
+  ShieldCheck,
   X,
 } from "lucide-react";
 
@@ -59,7 +62,7 @@ const carsData = [
     year: 2023,
     pricing: { daily: "50 OMR", weekly: "300 OMR", monthly: "1100 OMR" },
     services: { insurance: true, delivery: true },
-    images: { exterior: ["/car.jpeg"], interior: ["/car.jpeg"] },
+    images: { exterior: ["/car.jpeg","/car.jpeg"], interior: ["/car.jpeg","/car.jpeg"] },
     dailyNum: 50,
   },
 ];
@@ -73,8 +76,9 @@ const SORT_OPTIONS = [
 
 export default function CarPlatform() {
   const [cars, setCars] = useState([]);
-  const [selectedCar, setSelectedCar] = useState(null);
-  const [viewMode, setViewMode] = useState("grid");
+const [selectedCar, setSelectedCar] = useState(null);
+const [activeImageType, setActiveImageType] = useState("exterior");
+const [currentImage, setCurrentImage] = useState(0);  const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("price_asc");
   const [sortOpen, setSortOpen] = useState(false);
 
@@ -94,7 +98,9 @@ export default function CarPlatform() {
 
   const openWhatsApp = (num) => window.open(`https://wa.me/${num}`, "_blank");
   const callNow = (num) => (window.location.href = `tel:${num}`);
-
+const [activeTab, setActiveTab] = useState("exterior");
+const [currentExterior, setCurrentExterior] = useState(0);
+const [currentInterior, setCurrentInterior] = useState(0);
   return (
     <section className="mt-4 px-1 bg-[#f9fafb] ">
       {/* ── TOOLBAR ── */}
@@ -162,6 +168,11 @@ export default function CarPlatform() {
           {sortedCars.map((car) => (
             <div
               key={car.id}
+              onClick={() => {
+                setSelectedCar(car);
+                setActiveImageType("exterior");
+                setCurrentImage(0);
+              }}
               className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-200"
             >
               <div className="relative">
@@ -206,7 +217,8 @@ export default function CarPlatform() {
                       {car.pricing.daily}
                     </span>
                     <span className="text-[10px] sm:text-xs text-gray-500">
-                      {" "}/ day
+                      {" "}
+                      / day
                     </span>
                   </div>
                 </div>
@@ -310,274 +322,199 @@ export default function CarPlatform() {
         </div>
       )}
 
-      {/* MODAL */}
-     {selectedCar && (
-<div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3">
+ {selectedCar && (() => {
+  const images = activeTab === "exterior"
+    ? selectedCar.images.exterior
+    : selectedCar.images.interior;
+  const currentIndex = activeTab === "exterior" ? currentExterior : currentInterior;
+  const setIndex = activeTab === "exterior" ? setCurrentExterior : setCurrentInterior;
 
-<div className="bg-white w-full max-w-5xl max-h-[95vh] overflow-y-auto rounded-3xl shadow-2xl relative">
+  const prev = () => setIndex((i) => (i - 1 + images.length) % images.length);
+  const next = () => setIndex((i) => (i + 1) % images.length);
 
-{/* Close */}
-<button
-onClick={() => {
-setSelectedCar(null);
-setCurrentImage(0);
-}}
-className="absolute top-4 right-4 z-20 bg-black text-white p-2 rounded-full"
->
-<X size={20}/>
-</button>
+  return (
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-start justify-center p-3 overflow-y-auto">
+      <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden my-4">
 
-{/* Main Image */}
-<div className="relative">
+        {/* Hero Slider */}
+        <div className="relative h-56 md:h-72 bg-slate-100 overflow-hidden group">
 
-<img
-src={selectedCar.images[activeImageType][currentImage]}
-className="w-full h-72 md:h-[450px] object-cover"
-/>
+          {/* Slides */}
+          <div
+            className="flex h-full transition-transform duration-300 ease-in-out"
+            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+          >
+            {images.map((img, i) => (
+              <img
+                key={i}
+                src={img}
+                className="w-full h-full object-cover flex-shrink-0"
+                style={{ minWidth: "100%" }}
+              />
+            ))}
+          </div>
 
-<div className="absolute left-4 top-4 bg-white px-4 py-1 rounded-full shadow text-sm font-semibold">
-{selectedCar.year}
-</div>
+          {/* Prev / Next arrows */}
+          {images.length > 1 && (
+            <>
+              <button
+                onClick={prev}
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/85 flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <ChevronLeft size={16} className="text-slate-700" />
+              </button>
+              <button
+                onClick={next}
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/85 flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <ChevronRight size={16} className="text-slate-700" />
+              </button>
+            </>
+          )}
 
-</div>
+          {/* Dot indicators */}
+          {images.length > 1 && (
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+              {images.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setIndex(i)}
+                  className={`rounded-full transition-all ${
+                    i === currentIndex
+                      ? "w-4 h-1.5 bg-white"
+                      : "w-1.5 h-1.5 bg-white/50"
+                  }`}
+                />
+              ))}
+            </div>
+          )}
 
-{/* Image Tabs */}
-<div className="px-6 pt-5 flex gap-3">
+          {/* Close */}
+          <button
+            onClick={() => setSelectedCar(null)}
+            className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 flex items-center justify-center shadow-sm"
+          >
+            <X size={15} className="text-slate-700" />
+          </button>
 
-<button
-onClick={()=>{
-setActiveImageType("exterior");
-setCurrentImage(0);
-}}
-className={`px-5 py-2 rounded-full font-medium transition ${
-activeImageType==="exterior"
-? "bg-blue-600 text-white"
-: "bg-gray-100"
-}`}
->
-Exterior
-</button>
+          {/* Verified badge */}
+          <span className="absolute top-3 left-3 bg-emerald-500/90 text-white text-xs font-medium px-3 py-1 rounded-full flex items-center gap-1">
+            <ShieldCheck size={12} /> Verified
+          </span>
 
-<button
-onClick={()=>{
-setActiveImageType("interior");
-setCurrentImage(0);
-}}
-className={`px-5 py-2 rounded-full font-medium transition ${
-activeImageType==="interior"
-? "bg-blue-600 text-white"
-: "bg-gray-100"
-}`}
->
-Interior
-</button>
+          {/* Counter */}
+          <span className="absolute bottom-3 right-3 bg-black/40 text-white text-xs px-2 py-0.5 rounded-full">
+            {currentIndex + 1} / {images.length}
+          </span>
+        </div>
 
-</div>
+        {/* Photo Tabs */}
+        <div className="flex gap-2 px-4 pt-4">
+          <button
+            onClick={() => setActiveTab("exterior")}
+            className={`flex-1 py-2 rounded-full text-sm font-medium transition-all ${
+              activeTab === "exterior"
+                ? "bg-blue-600 text-white"
+                : "bg-slate-100 text-slate-500"
+            }`}
+          >
+            Exterior
+          </button>
+          <button
+            onClick={() => setActiveTab("interior")}
+            className={`flex-1 py-2 rounded-full text-sm font-medium transition-all ${
+              activeTab === "interior"
+                ? "bg-blue-600 text-white"
+                : "bg-slate-100 text-slate-500"
+            }`}
+          >
+            Interior
+          </button>
+        </div>
 
-{/* Thumbnails */}
-<div className="px-6 mt-4 flex gap-3 overflow-x-auto">
+        {/* Thumbnails */}
+        <div className="flex gap-2 overflow-x-auto px-4 py-3 scrollbar-hide">
+          {images.map((img, index) => (
+            <img
+              key={index}
+              src={img}
+              onClick={() => setIndex(index)}
+              className={`w-16 h-12 rounded-xl object-cover cursor-pointer flex-shrink-0 transition-all border-2 ${
+                index === currentIndex ? "border-blue-600" : "border-transparent opacity-60"
+              }`}
+            />
+          ))}
+        </div>
 
-{selectedCar.images[activeImageType].map((img,index)=>(
-<img
-key={index}
-src={img}
-onClick={()=>setCurrentImage(index)}
-className={`w-24 h-16 object-cover rounded-xl cursor-pointer border-2 ${
-currentImage===index
-? "border-blue-600"
-: "border-transparent"
-}`}
-/>
-))}
+        {/* Title */}
+        <div className="px-4 pb-4">
+          <h1 className="text-xl font-semibold text-slate-900">{selectedCar.name}</h1>
+          <p className="text-sm text-slate-400 mt-1 flex items-center gap-1">
+            <MapPin size={13} /> {selectedCar.dealer} · {selectedCar.location}
+          </p>
+        </div>
 
-</div>
+        <div className="h-px bg-slate-100 mx-4" />
 
-<div className="p-6 space-y-6">
+        {/* Specs */}
+        <div className="grid grid-cols-3 gap-2 px-4 py-4">
+          {[
+            { icon: <Calendar size={18} />, label: "Year", value: selectedCar.year },
+            { icon: <Fuel size={18} />, label: "Fuel", value: selectedCar.fuel },
+            { icon: <Settings size={18} />, label: "Trans.", value: selectedCar.transmission },
+          ].map(({ icon, label, value }) => (
+            <div key={label} className="bg-slate-50 rounded-xl p-3 text-center">
+              <div className="text-blue-600 flex justify-center mb-1">{icon}</div>
+              <p className="text-slate-400 text-xs">{label}</p>
+              <p className="text-slate-800 text-sm font-medium mt-0.5">{value}</p>
+            </div>
+          ))}
+        </div>
 
-{/* Title */}
-<div>
+        <div className="h-px bg-slate-100 mx-4" />
 
-<div className="flex items-center gap-3">
+        {/* Pricing */}
+        <div className="px-4 py-4">
+          <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-3">
+            Rental pricing
+          </p>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { label: "Daily", value: selectedCar.pricing.daily },
+              { label: "Weekly", value: selectedCar.pricing.weekly },
+              { label: "Monthly", value: selectedCar.pricing.monthly },
+            ].map(({ label, value }) => (
+              <div key={label} className="bg-blue-50 border border-blue-100 rounded-xl p-3 text-center">
+                <p className="text-blue-500 text-xs">{label}</p>
+                <p className="text-blue-900 font-semibold text-base mt-0.5">
+                  {value.replace(" OMR", "")}
+                  <span className="text-xs font-normal ml-0.5">OMR</span>
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
 
-<h2 className="text-3xl font-bold">
-{selectedCar.name}
-</h2>
+        {/* CTA Buttons */}
+        <div className="px-4 pb-6 flex flex-col gap-3">
+          <button
+            onClick={() => openWhatsApp(selectedCar.whatsapp)}
+            className="w-full h-14 bg-[#25D366] text-white rounded-2xl font-medium text-base flex items-center justify-center gap-2 active:scale-[0.98] transition-transform"
+          >
+            <MessageCircle size={18} /> WhatsApp
+          </button>
+          <button
+            onClick={() => callNow(selectedCar.phone)}
+            className="w-full h-14 bg-blue-600 text-white rounded-2xl font-medium text-base flex items-center justify-center gap-2 active:scale-[0.98] transition-transform"
+          >
+            <Phone size={18} /> Call now
+          </button>
+        </div>
 
-<span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
-Verified Dealer
-</span>
-
-</div>
-
-<p className="mt-2 text-gray-500 flex items-center gap-2">
-<MapPin size={16}/>
-{selectedCar.dealer} • {selectedCar.location}
-</p>
-
-</div>
-
-{/* Badges */}
-<div className="flex flex-wrap gap-3">
-
-{selectedCar.services.insurance && (
-<div className="bg-green-50 text-green-700 px-4 py-2 rounded-xl font-medium">
-✓ Insurance Included
-</div>
-)}
-
-{selectedCar.services.delivery && (
-<div className="bg-blue-50 text-blue-700 px-4 py-2 rounded-xl font-medium">
-✓ Home Delivery
-</div>
-)}
-
-</div>
-
-{/* Specs */}
-<div className="grid grid-cols-3 gap-4">
-
-<div className="bg-slate-50 rounded-2xl p-5 text-center">
-<Fuel size={22} className="mx-auto text-blue-600 mb-2"/>
-<p className="text-gray-500 text-sm">
-Fuel
-</p>
-<p className="font-semibold">
-{selectedCar.fuel}
-</p>
-</div>
-
-<div className="bg-slate-50 rounded-2xl p-5 text-center">
-<Settings size={22} className="mx-auto text-blue-600 mb-2"/>
-<p className="text-gray-500 text-sm">
-Transmission
-</p>
-<p className="font-semibold">
-{selectedCar.transmission}
-</p>
-</div>
-
-<div className="bg-slate-50 rounded-2xl p-5 text-center">
-<Calendar size={22} className="mx-auto text-blue-600 mb-2"/>
-<p className="text-gray-500 text-sm">
-Year
-</p>
-<p className="font-semibold">
-{selectedCar.year}
-</p>
-</div>
-
-</div>
-
-{/* Colors */}
-<div>
-
-<h3 className="font-bold text-lg mb-4">
-Colors
-</h3>
-
-<div className="flex gap-8">
-
-<div className="flex items-center gap-3">
-
-<div className="w-8 h-8 rounded-full border bg-white"></div>
-
-<div>
-<p className="text-gray-500 text-sm">
-Exterior
-</p>
-<p className="font-medium">
-White
-</p>
-</div>
-
-</div>
-
-<div className="flex items-center gap-3">
-
-<div className="w-8 h-8 rounded-full border bg-black"></div>
-
-<div>
-<p className="text-gray-500 text-sm">
-Interior
-</p>
-<p className="font-medium">
-Black
-</p>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-{/* Pricing */}
-<div className="bg-blue-50 rounded-3xl p-6">
-
-<h3 className="font-bold text-lg mb-5">
-Rental Pricing
-</h3>
-
-<div className="grid grid-cols-3 gap-4">
-
-<div className="bg-white rounded-2xl p-4 text-center">
-<p className="text-gray-500">
-Daily
-</p>
-<p className="font-bold text-xl">
-{selectedCar.pricing.daily}
-</p>
-</div>
-
-<div className="bg-white rounded-2xl p-4 text-center">
-<p className="text-gray-500">
-Weekly
-</p>
-<p className="font-bold text-xl">
-{selectedCar.pricing.weekly}
-</p>
-</div>
-
-<div className="bg-white rounded-2xl p-4 text-center">
-<p className="text-gray-500">
-Monthly
-</p>
-<p className="font-bold text-xl">
-{selectedCar.pricing.monthly}
-</p>
-</div>
-
-</div>
-
-</div>
-
-{/* Buttons */}
-<div className="grid md:grid-cols-2 gap-4">
-
-<button
-onClick={()=>openWhatsApp(selectedCar.whatsapp)}
-className="h-16 rounded-2xl bg-[#25D366] text-white font-bold text-lg flex items-center justify-center gap-3 shadow-lg hover:scale-[1.02] transition"
->
-<MessageCircle size={24}/>
-WhatsApp
-</button>
-
-<button
-onClick={()=>callNow(selectedCar.phone)}
-className="h-16 rounded-2xl bg-blue-600 text-white font-bold text-lg flex items-center justify-center gap-3 shadow-lg hover:scale-[1.02] transition"
->
-<Phone size={24}/>
-Call Now
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-)}
+      </div>
+    </div>
+  );
+})()}
     </section>
   );
 }
