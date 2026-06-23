@@ -74,7 +74,7 @@ const SORT_OPTIONS = [
 export default function CarPlatform() {
   const [cars, setCars] = useState([]);
   const [selectedCar, setSelectedCar] = useState(null);
-  const [viewMode, setViewMode] = useState("list");
+  const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("price_asc");
   const [sortOpen, setSortOpen] = useState(false);
 
@@ -311,29 +311,273 @@ export default function CarPlatform() {
       )}
 
       {/* MODAL */}
-      {selectedCar && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="bg-white w-full max-w-3xl rounded-2xl overflow-hidden relative">
-            <button
-              onClick={() => setSelectedCar(null)}
-              className="absolute top-3 right-3 bg-black text-white p-2 rounded-full"
-            >
-              <X size={18} />
-            </button>
-            <img
-              src={selectedCar.images.exterior[0]}
-              className="w-full h-[420px] object-cover"
-            />
-            <div className="p-6 space-y-3">
-              <h3 className="text-lg font-medium">{selectedCar.name}</h3>
-              <p className="text-sm text-gray-500 flex items-center gap-2">
-                <MapPin size={14} />
-                {selectedCar.dealer} • {selectedCar.location}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
+     {selectedCar && (
+<div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3">
+
+<div className="bg-white w-full max-w-5xl max-h-[95vh] overflow-y-auto rounded-3xl shadow-2xl relative">
+
+{/* Close */}
+<button
+onClick={() => {
+setSelectedCar(null);
+setCurrentImage(0);
+}}
+className="absolute top-4 right-4 z-20 bg-black text-white p-2 rounded-full"
+>
+<X size={20}/>
+</button>
+
+{/* Main Image */}
+<div className="relative">
+
+<img
+src={selectedCar.images[activeImageType][currentImage]}
+className="w-full h-72 md:h-[450px] object-cover"
+/>
+
+<div className="absolute left-4 top-4 bg-white px-4 py-1 rounded-full shadow text-sm font-semibold">
+{selectedCar.year}
+</div>
+
+</div>
+
+{/* Image Tabs */}
+<div className="px-6 pt-5 flex gap-3">
+
+<button
+onClick={()=>{
+setActiveImageType("exterior");
+setCurrentImage(0);
+}}
+className={`px-5 py-2 rounded-full font-medium transition ${
+activeImageType==="exterior"
+? "bg-blue-600 text-white"
+: "bg-gray-100"
+}`}
+>
+Exterior
+</button>
+
+<button
+onClick={()=>{
+setActiveImageType("interior");
+setCurrentImage(0);
+}}
+className={`px-5 py-2 rounded-full font-medium transition ${
+activeImageType==="interior"
+? "bg-blue-600 text-white"
+: "bg-gray-100"
+}`}
+>
+Interior
+</button>
+
+</div>
+
+{/* Thumbnails */}
+<div className="px-6 mt-4 flex gap-3 overflow-x-auto">
+
+{selectedCar.images[activeImageType].map((img,index)=>(
+<img
+key={index}
+src={img}
+onClick={()=>setCurrentImage(index)}
+className={`w-24 h-16 object-cover rounded-xl cursor-pointer border-2 ${
+currentImage===index
+? "border-blue-600"
+: "border-transparent"
+}`}
+/>
+))}
+
+</div>
+
+<div className="p-6 space-y-6">
+
+{/* Title */}
+<div>
+
+<div className="flex items-center gap-3">
+
+<h2 className="text-3xl font-bold">
+{selectedCar.name}
+</h2>
+
+<span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+Verified Dealer
+</span>
+
+</div>
+
+<p className="mt-2 text-gray-500 flex items-center gap-2">
+<MapPin size={16}/>
+{selectedCar.dealer} • {selectedCar.location}
+</p>
+
+</div>
+
+{/* Badges */}
+<div className="flex flex-wrap gap-3">
+
+{selectedCar.services.insurance && (
+<div className="bg-green-50 text-green-700 px-4 py-2 rounded-xl font-medium">
+✓ Insurance Included
+</div>
+)}
+
+{selectedCar.services.delivery && (
+<div className="bg-blue-50 text-blue-700 px-4 py-2 rounded-xl font-medium">
+✓ Home Delivery
+</div>
+)}
+
+</div>
+
+{/* Specs */}
+<div className="grid grid-cols-3 gap-4">
+
+<div className="bg-slate-50 rounded-2xl p-5 text-center">
+<Fuel size={22} className="mx-auto text-blue-600 mb-2"/>
+<p className="text-gray-500 text-sm">
+Fuel
+</p>
+<p className="font-semibold">
+{selectedCar.fuel}
+</p>
+</div>
+
+<div className="bg-slate-50 rounded-2xl p-5 text-center">
+<Settings size={22} className="mx-auto text-blue-600 mb-2"/>
+<p className="text-gray-500 text-sm">
+Transmission
+</p>
+<p className="font-semibold">
+{selectedCar.transmission}
+</p>
+</div>
+
+<div className="bg-slate-50 rounded-2xl p-5 text-center">
+<Calendar size={22} className="mx-auto text-blue-600 mb-2"/>
+<p className="text-gray-500 text-sm">
+Year
+</p>
+<p className="font-semibold">
+{selectedCar.year}
+</p>
+</div>
+
+</div>
+
+{/* Colors */}
+<div>
+
+<h3 className="font-bold text-lg mb-4">
+Colors
+</h3>
+
+<div className="flex gap-8">
+
+<div className="flex items-center gap-3">
+
+<div className="w-8 h-8 rounded-full border bg-white"></div>
+
+<div>
+<p className="text-gray-500 text-sm">
+Exterior
+</p>
+<p className="font-medium">
+White
+</p>
+</div>
+
+</div>
+
+<div className="flex items-center gap-3">
+
+<div className="w-8 h-8 rounded-full border bg-black"></div>
+
+<div>
+<p className="text-gray-500 text-sm">
+Interior
+</p>
+<p className="font-medium">
+Black
+</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{/* Pricing */}
+<div className="bg-blue-50 rounded-3xl p-6">
+
+<h3 className="font-bold text-lg mb-5">
+Rental Pricing
+</h3>
+
+<div className="grid grid-cols-3 gap-4">
+
+<div className="bg-white rounded-2xl p-4 text-center">
+<p className="text-gray-500">
+Daily
+</p>
+<p className="font-bold text-xl">
+{selectedCar.pricing.daily}
+</p>
+</div>
+
+<div className="bg-white rounded-2xl p-4 text-center">
+<p className="text-gray-500">
+Weekly
+</p>
+<p className="font-bold text-xl">
+{selectedCar.pricing.weekly}
+</p>
+</div>
+
+<div className="bg-white rounded-2xl p-4 text-center">
+<p className="text-gray-500">
+Monthly
+</p>
+<p className="font-bold text-xl">
+{selectedCar.pricing.monthly}
+</p>
+</div>
+
+</div>
+
+</div>
+
+{/* Buttons */}
+<div className="grid md:grid-cols-2 gap-4">
+
+<button
+onClick={()=>openWhatsApp(selectedCar.whatsapp)}
+className="h-16 rounded-2xl bg-[#25D366] text-white font-bold text-lg flex items-center justify-center gap-3 shadow-lg hover:scale-[1.02] transition"
+>
+<MessageCircle size={24}/>
+WhatsApp
+</button>
+
+<button
+onClick={()=>callNow(selectedCar.phone)}
+className="h-16 rounded-2xl bg-blue-600 text-white font-bold text-lg flex items-center justify-center gap-3 shadow-lg hover:scale-[1.02] transition"
+>
+<Phone size={24}/>
+Call Now
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+)}
     </section>
   );
 }
