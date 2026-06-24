@@ -8,37 +8,52 @@ import {
   UserRound,
   CalendarDays,
   ArrowRight,
-  MapPin,
 } from "lucide-react";
 import SearchWrapper from "./SearchWrapper";
 import BookingSearchHero from "./HomeSearchActions";
+
 const options = [
-  { title: "Airport Pickup", desc: "Car delivered at airport", icon: PlaneLanding, href: "/booking/airport" },
-  { title: "Normal Booking", desc: "Pickup from dealership", icon: Car, href: "/booking/normal" },
-  { title: "With Driver", desc: "Car with trusted driver", icon: UserRound, href: "/booking/driver" },
-  { title: "Monthly Rental", desc: "Long-term rental deals", icon: CalendarDays, href: "/booking/monthly" },
+  {
+    title: "Airport Pickup",
+    desc: "Car delivered at airport",
+    icon: PlaneLanding,
+    href: "/booking/airport",
+    image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=80",
+  },
+  {
+    title: "Regular Booking",
+    desc: "Pickup from dealership",
+    icon: Car,
+    href: "/booking/normal",
+    image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=80",
+  },
+  {
+    title: "Khareef Packages",
+    desc: "Car with trusted driver",
+    icon: UserRound,
+    href: "/booking/driver",
+    image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=600&q=80",
+  },
+  {
+    title: "Monthly Rental",
+    desc: "Long-term rental deals",
+    icon: CalendarDays,
+    href: "/booking/monthly",
+    image: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=600&q=80",
+  },
 ];
 
 const todayISO = new Date().toISOString().split("T")[0];
 
-const formatDate = (date:any) =>
-  new Date(date).toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-  });
-
 export default function BookingOptions() {
   const router = useRouter();
-  const [pickupDate, setPickupDate] = useState(todayISO);
-  const [returnDate, setReturnDate] = useState(todayISO);
 
-  const goToBooking = (href:any) => {
+  const goToBooking = (href: string) => {
     router.push(`options`);
   };
 
   return (
     <>
-    {/* <BookingSearchHero /> */}
       <section className="mt-8 md:mt-10">
         <div className="mb-4 flex items-end justify-between gap-4">
           <div>
@@ -66,23 +81,37 @@ export default function BookingOptions() {
               <button
                 key={item.title}
                 onClick={() => goToBooking(item.href)}
-                className="group rounded-3xl border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-md active:scale-[0.98] md:min-h-[190px] md:p-5"
+                className="group relative overflow-hidden rounded-3xl text-left shadow-sm transition hover:-translate-y-1 hover:shadow-lg active:scale-[0.98] h-36 md:h-48"
               >
-                <div className="mb-4 flex items-center justify-between md:mb-8">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-50 transition group-hover:bg-blue-600 md:h-14 md:w-14">
-                    <Icon className="h-6 w-6 text-blue-600 transition group-hover:text-white md:h-7 md:w-7" />
-                  </div>
+                {/* Background image */}
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
 
-                  <ArrowRight className="h-4 w-4 text-slate-400 transition group-hover:translate-x-1 group-hover:text-blue-600" />
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-black/10" />
+
+                {/* Icon + arrow row */}
+                <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
+                    <Icon className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm transition group-hover:bg-white/40">
+                    <ArrowRight className="h-3.5 w-3.5 text-white transition group-hover:translate-x-0.5" />
+                  </div>
                 </div>
 
-                <h3 className="text-sm font-bold text-slate-900 md:text-lg">
-                  {item.title}
-                </h3>
-
-                <p className="mt-1 text-xs leading-4 text-slate-500 md:mt-2 md:text-sm md:leading-5">
-                  {item.desc}
-                </p>
+                {/* Text */}
+                <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4">
+                  <h3 className="text-sm font-bold text-white md:text-base leading-tight">
+                    {item.title}
+                  </h3>
+                  <p className="mt-0.5 text-xs text-white/70 leading-4">
+                    {item.desc}
+                  </p>
+                </div>
               </button>
             );
           })}
