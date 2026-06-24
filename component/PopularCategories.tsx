@@ -14,7 +14,7 @@ const carTypes = [
     id: "suv",
     title: "SUV",
     desc: "Family trips",
-    image: "https://images.unsplash.com/photo-1551522435-a13afa10f103?w=400&q=80",
+    image: "https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?w=400",
     href: "/browse/suv",
   },
   {
@@ -25,9 +25,9 @@ const carTypes = [
     href: "/browse/luxury",
   },
   {
-    id: "pickup",
-    title: "Pickup",
-    desc: "Heavy hauling",
+    id: "sports",
+    title: "Sports",
+    desc: "High-performance vehicles",
     image: "https://images.unsplash.com/photo-1612825173281-9a193378527e?w=400&q=80",
     href: "/browse/pickup",
   },
@@ -35,7 +35,7 @@ const carTypes = [
     id: "hatchback",
     title: "Hatchback",
     desc: "City cruiser",
-    image: "https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=400&q=80",
+    image: "https://images.pexels.com/photos/1007410/pexels-photo-1007410.jpeg?w=400",
     href: "/browse/hatchback",
   },
   {
