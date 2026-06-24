@@ -17,6 +17,7 @@ import {
   Clock,
 } from "lucide-react";
 import FeaturedCars from "../component/FeaturedCars";
+import { DealerShipCard } from "../component/DealerShip";
 
 export default function AirportPickupPage() {
   const [selectedBody, setSelectedBody] = useState(null);
@@ -52,7 +53,50 @@ export default function AirportPickupPage() {
     Mercedes: ["C200", "E300", "G63"],
     Nissan: ["Sunny", "Patrol", "Altima"],
   };
-
+const carTypes = [
+  {
+    id: "sedan",
+    title: "Sedan",
+    desc: "Daily drive",
+    image: "https://images.unsplash.com/photo-1590362891991-f776e747a588?w=400&q=80",
+    href: "/browse/sedan",
+  },
+  {
+    id: "suv",
+    title: "SUV",
+    desc: "Family trips",
+    image: "https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?w=400",
+    href: "/browse/suv",
+  },
+  {
+    id: "luxury",
+    title: "Luxury",
+    desc: "Premium cars",
+    image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&q=80",
+    href: "/browse/luxury",
+  },
+  {
+    id: "sports",
+    title: "Sports",
+    desc: "High-performance vehicles",
+    image: "https://images.unsplash.com/photo-1612825173281-9a193378527e?w=400&q=80",
+    href: "/browse/pickup",
+  },
+  {
+    id: "hatchback",
+    title: "Hatchback",
+    desc: "City cruiser",
+    image: "https://images.pexels.com/photos/1007410/pexels-photo-1007410.jpeg?w=400",
+    href: "/browse/hatchback",
+  },
+  {
+    id: "van",
+    title: "Van",
+    desc: "Group travel",
+  image: "https://images.unsplash.com/photo-1464219789935-c2d9d9aba644?w=400&q=80",
+    href: "/browse/van",
+  },
+];
   return (
     <div className="min-h-screen overflow-x-hidden bg-slate-50 pb-24">
 {/* AIRPORT PICKUP HEADER — light, card-based */}
@@ -111,54 +155,9 @@ export default function AirportPickupPage() {
 </section>
 
     {/* DEALERSHIPS */}
+    <DealerShipCard dealership={dealerships} />
 {/* DEALERSHIPS */}
-<section className="mt-6 px-5">
-  <div className="mb-3 flex items-baseline justify-between">
-    <h2 className="text-lg font-semibold text-slate-900">
-      Featured dealerships
-    </h2>
-    <button className="flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700">
-      View all
-      <ChevronRight size={16} />
-    </button>
-  </div>
 
-  <div className="flex gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory -mx-5 px-5 pb-1">
-    {dealerships.map((d, i) => (
-      <div
-        key={i}
-        className="min-w-[220px] shrink-0 snap-start rounded-2xl border border-slate-200 bg-white p-4 transition-all hover:border-blue-200 hover:shadow-md"
-      >
-        <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50">
-            <Building size={22} className="text-blue-600" />
-          </div>
-
-          <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-slate-900">
-              {d.name}
-            </p>
-            <p className="flex items-center gap-1 text-xs text-slate-500">
-              <Star size={12} className="fill-amber-400 text-amber-400" />
-              {d.rating} &middot; {d.location}
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-2.5 flex items-center justify-between border-t border-slate-100 pt-2.5">
-          <span className="text-[13px] text-slate-500">
-            {d.cars} cars available
-          </span>
-          {d.verified && (
-            <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700">
-              Verified
-            </span>
-          )}
-        </div>
-      </div>
-    ))}
-  </div>
-</section>
       {/* BODY TYPES */}
       <section className="mt-8 px-5">
         <h2 className="mb-3 text-lg font-semibold text-slate-900">
@@ -219,6 +218,7 @@ export default function AirportPickupPage() {
         </div>
       </section>
 
+      
       {/* FILTERS */}
       {selectedBody && (
         <section className="mt-8 px-5">
