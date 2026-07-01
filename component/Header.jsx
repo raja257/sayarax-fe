@@ -10,32 +10,35 @@ import {
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 
+
 export const Header = ({
   hiddenRoutes = [],
   onChangeLocation,
 }) => {
   const pathname = usePathname();
 
-  const [lang, setLang] = useState("EN");
+  const [lang, setLang] = useState("ar");
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [days, setDays] = useState(1);
 
   if (hiddenRoutes.includes(pathname)) return null;
 
+  const isRTL = lang === "ar";
+
+  const t = (en, ar) => (isRTL ? ar : en);
+
   const changeLanguage = (language) => {
     setLang(language);
     setShowLangMenu(false);
 
-    // Optional callback
-    if (onChangeLocation) {
-      onChangeLocation(language);
-    }
-
-    // i18n.changeLanguage(language)
+    onChangeLocation?.(language);
   };
 
   return (
-    <header className="sticky top-0 z-30 border-b border-[#2A2A24] bg-[#1B1B18] text-white">
+    <header
+      dir={isRTL ? "rtl" : "ltr"}
+      className="sticky top-0 z-30 border-b border-[#2A2A24] bg-[#1B1B18] text-white"
+    >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
         {/* Logo */}
         <div className="flex items-center gap-3">
@@ -43,13 +46,13 @@ export const Header = ({
             <Car size={20} strokeWidth={2.5} />
           </span>
 
-          <div className="leading-tight">
+          <div className={isRTL ? "text-right" : "text-left"}>
             <h1 className="text-lg font-extrabold tracking-tight">
               Sayara X
             </h1>
 
             <p className="text-[10px] uppercase tracking-[0.2em] text-white/50">
-              Self-drive rentals · Oman
+              {t("Self-drive rentals · Oman", "تأجير سيارات ذاتي القيادة · عمان")}
             </p>
           </div>
         </div>
@@ -64,6 +67,7 @@ export const Header = ({
             >
               <Languages size={16} />
               <span>{lang}</span>
+
               <ChevronDown
                 size={15}
                 className={`transition ${
@@ -72,40 +76,47 @@ export const Header = ({
               />
             </button>
 
-            {showLangMenu && (
-              <div className="absolute right-0 mt-2 w-36 overflow-hidden rounded-xl border border-white/10 bg-[#232320] shadow-xl">
-                <button
-                  onClick={() => changeLanguage("EN")}
-                  className={`w-full px-4 py-3 text-left text-sm hover:bg-white/10 ${
-                    lang === "EN" ? "bg-white/10" : ""
-                  }`}
-                >
-                  🇬🇧 English
-                </button>
+           {showLangMenu && (
+  <div
+    className={`absolute mt-2 w-36 overflow-hidden rounded-xl border border-white/10 bg-[#232320] shadow-xl ${
+      lang === "ar" ? "left-0" : "right-0"
+    }`}
+  >
+    <button
+      onClick={() => changeLanguage("en")}
+      className={`w-full px-4 py-3 text-sm hover:bg-white/10 ${
+        lang === "en" ? "bg-white/10" : ""
+      } ${lang === "ar" ? "text-right" : "text-left"}`}
+    >
+      🇬🇧 English
+    </button>
 
-                <button
-                  onClick={() => changeLanguage("AR")}
-                  className={`w-full px-4 py-3 text-left text-sm hover:bg-white/10 ${
-                    lang === "AR" ? "bg-white/10" : ""
-                  }`}
-                >
-                  🇴🇲 العربية
-                </button>
-              </div>
-            )}
+    <button
+      onClick={() => changeLanguage("ar")}
+      className={`w-full px-4 py-3 text-sm hover:bg-white/10 ${
+        lang === "ar" ? "bg-white/10" : ""
+      } ${lang === "ar" ? "text-right" : "text-left"}`}
+    >
+      🇴🇲 العربية
+    </button>
+  </div>
+)}
           </div>
 
           {/* Sign In */}
           <button className="hidden rounded-full bg-[#D9A441] px-5 py-2 text-sm font-semibold text-[#1B1B18] transition hover:bg-[#e3b25c] sm:block">
-            Sign In
+            {t("Sign In", "تسجيل الدخول")}
           </button>
         </div>
       </div>
 
       {/* Mobile Trip Length */}
-      <div className="flex items-center justify-center gap-3 border-t border-white/10 px-4 py-2 sm:hidden">
+      <div
+        className="flex items-center justify-center gap-3 border-t border-white/10 px-4 py-2 sm:hidden"
+        dir={isRTL ? "rtl" : "ltr"}
+      >
         <span className="text-sm text-white/60">
-          Trip length
+          {t("Trip length", "مدة الرحلة")}
         </span>
 
         <button
@@ -116,7 +127,8 @@ export const Header = ({
         </button>
 
         <span className="w-14 text-center font-semibold">
-          {days} day{days > 1 ? "s" : ""}
+          {days} {t("day", "يوم")}
+          {days > 1 ? "s" : ""}
         </span>
 
         <button
