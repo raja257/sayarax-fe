@@ -1,14 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useLanguage } from "../context/LanguageContext";
 
 type Lang = "en" | "ar";
 
-export default function BrowseByType({ lang = "ar" }: { lang?: Lang }) {
+export default function BrowseByType() {
   const router = useRouter();
 
-  const t = (field: { en: string; ar: string }) =>
-    lang === "ar" ? field.ar : field.en;
+   const { lang, t } = useLanguage();
+ 
 
   const carTypes = [
     {
@@ -85,7 +86,7 @@ export default function BrowseByType({ lang = "ar" }: { lang?: Lang }) {
 
         <button
           onClick={() => router.push("/browse")}
-          className="text-sm font-semibold text-blue-600 hover:underline"
+          className="text-sm font-semibold text-[#c1512e] hover:underline"
         >
           {lang === "ar" ? "عرض الكل" : "View all"}
         </button>

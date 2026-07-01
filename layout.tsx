@@ -5,6 +5,7 @@ import "./globals.css";
 import SearchWrapper from "./component/SearchWrapper";
 import BottomTabsWrapper from "./component/BottomTabsWrapper";
 import { Car, Heart, Home, User } from "lucide-react";
+import { LanguageProvider } from "./context/LanguageContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,25 +24,30 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div  className="min-h-screen text-textPrimary dark:text-slate-200">
-          <Header hiddenRoutes={[""] as any} onChangeLocation={undefined} />
-          {/* SS // */}
-          {/* Mobile Search (conditionally hidden on some routes) */}
-          {/* <SearchWrapper hiddenRoutes={["/reels", ]} /> */}
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning
+      >
+        <LanguageProvider>
+          <div className="min-h-screen text-textPrimary dark:text-slate-200">
+            <Header hiddenRoutes={[""] as any} onChangeLocation={undefined} />
+            {/* SS // */}
+            {/* Mobile Search (conditionally hidden on some routes) */}
+            {/* <SearchWrapper hiddenRoutes={["/reels", ]} /> */}
 
-          <main  className=" max-w-7xl mx-auto">{children}</main>
-          
-          {/* Bottom Navigation */}
-          <BottomTabsWrapper hiddenRoutes={["/reels", "/profile"]}  />
-        </div>
+            <main className=" max-w-7xl mx-auto">{children}</main>
+
+            {/* Bottom Navigation */}
+            <BottomTabsWrapper hiddenRoutes={["/reels", "/profile"]} />
+          </div>
+        </LanguageProvider>
       </body>
     </html>
   );

@@ -8,17 +8,20 @@ import FeaturedCars from "./component/FeaturedCars";
 // import HotDeals from "./component/HotDeals";
 import { useRouter } from "next/navigation";
 import { BadgeCheck, Star } from "lucide-react";
+import { useLanguage } from "./context/LanguageContext";
 
 export default function HomePage() {
+  const { lang, t } = useLanguage();
+
   return (
     <main className="px-4 pb-20">
-      <QuickBookingCard />
+      <QuickBookingCard  />
 
       <div className="mt-8">
         <PopularCategories />
       </div>
       <PremiumDealers />
-      <FeaturedCars />
+      <FeaturedCars  />
       {/* <MonthlyRentalBanner /> */}
       {/* <NearbyDealerships /> */}
       {/* <HotDeals /> */}
@@ -29,13 +32,11 @@ export default function HomePage() {
 
 type Lang = "en" | "ar";
 
-export function PremiumDealers({ lang = "ar" }: { lang?: Lang }) {
+export function PremiumDealers() {
   const router = useRouter();
+  const { lang, t } = useLanguage();
 
   const isRTL = lang === "ar";
-
-  const t = (field: { en: string; ar: string }) =>
-    isRTL ? field.ar : field.en;
 
   const premiumDealers = [
     {
@@ -120,7 +121,7 @@ export function PremiumDealers({ lang = "ar" }: { lang?: Lang }) {
 
         <button
           onClick={() => router.push("/dealers")}
-          className="text-sm font-semibold text-blue-600 hover:underline"
+          className="text-sm font-semibold text-[#c1512e] hover:underline"
         >
           {isRTL ? "عرض الكل" : "View all"}
         </button>

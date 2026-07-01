@@ -19,35 +19,44 @@ import {
 } from "lucide-react";
 import FeaturedCars from "../component/FeaturedCars";
 import { useSearchParams } from "next/navigation";
+import { useLanguage } from "../context/LanguageContext";
 
 /* ---------------------------------- data ---------------------------------- */
 
 const FILTER_TABS = [
-  { key: "bodyType", label: "Body type", icon: Car },
-  { key: "make", label: "Make", icon: Tag },
-  { key: "model", label: "Model", icon: Layers },
-  { key: "budget", label: "Daily rate", icon: Wallet },
-  { key: "governorate", label: "Governorate", icon: Map },
-  { key: "state", label: "Wilayat", icon: MapPin },
+  { key: "bodyType", icon: Car, label: { en: "Body type", ar: "نوع الهيكل" } },
+  { key: "make", icon: Tag, label: { en: "Make", ar: "الشركة المصنعة" } },
+  { key: "model", icon: Layers, label: { en: "Model", ar: "الموديل" } },
+  {
+    key: "budget",
+    icon: Wallet,
+    label: { en: "Daily rate", ar: "السعر اليومي" },
+  },
+  {
+    key: "governorate",
+    icon: Map,
+    label: { en: "Governorate", ar: "المحافظة" },
+  },
+  { key: "state", icon: MapPin, label: { en: "Wilayat", ar: "الولاية" } },
 ];
 
 const LABELS = {
-  bodyType: "Body type",
-  make: "Make",
-  model: "Model",
-  budget: "Daily rate",
-  governorate: "Governorate",
-  state: "Wilayat",
+  bodyType: { en: "Body type", ar: "نوع الهيكل" },
+  make: { en: "Make", ar: "الشركة المصنعة" },
+  model: { en: "Model", ar: "الموديل" },
+  budget: { en: "Daily rate", ar: "السعر اليومي" },
+  governorate: { en: "Governorate", ar: "المحافظة" },
+  state: { en: "Wilayat", ar: "الولاية" },
 };
 
 const BODY_TYPES = [
-  "Sedan",
-  "SUV",
-  "Hatchback",
-  "Pickup",
-  "Coupe",
-  "Van",
-  "Convertible",
+  { en: "Sedan", ar: "سيدان" },
+  { en: "SUV", ar: "دفع رباعي" },
+  { en: "Hatchback", ar: "هاتشباك" },
+  { en: "Pickup", ar: "بيك أب" },
+  { en: "Coupe", ar: "كوبيه" },
+  { en: "Van", ar: "فان" },
+  { en: "Convertible", ar: "مكشوفة" },
 ];
 
 const MAKES = [
@@ -83,12 +92,83 @@ const GOVERNORATE_WILAYATS = {
   Musandam: ["Khasab", "Bukha", "Daba"],
 };
 
+// Arabic labels for governorates / wilayats (fall back to the Latin key/value if not found)
+const GOVERNORATE_AR = {
+  Muscat: "مسقط",
+  Dhofar: "ظفار",
+  "Al Batinah North": "شمال الباطنة",
+  "Al Batinah South": "جنوب الباطنة",
+  "Al Dakhiliyah": "الداخلية",
+  "Al Sharqiyah North": "شمال الشرقية",
+  "Al Sharqiyah South": "جنوب الشرقية",
+  "Al Dhahirah": "الظاهرة",
+  "Al Buraimi": "البريمي",
+  Musandam: "مسندم",
+};
+
+const WILAYAT_AR = {
+  Muscat: "مسقط",
+  Muttrah: "مطرح",
+  Bawshar: "بوشر",
+  Seeb: "السيب",
+  "Al Amerat": "العامرات",
+  Qurayyat: "قريات",
+  Salalah: "صلالة",
+  Taqah: "طاقة",
+  Mirbat: "مرباط",
+  Rakhyut: "رخيوت",
+  Thumrait: "ثمريت",
+  Sohar: "صحار",
+  Shinas: "شناص",
+  Liwa: "لوى",
+  Saham: "صحم",
+  Rustaq: "الرستاق",
+  Nakhal: "نخل",
+  Barka: "بركاء",
+  "Al Musannah": "المصنعة",
+  Nizwa: "نزوى",
+  Manah: "منح",
+  Bahla: "بهلاء",
+  Adam: "أدم",
+  Ibra: "إبراء",
+  "Al Mudhaibi": "المضيبي",
+  "Wadi Bani Khalid": "وادي بني خالد",
+  Sur: "صور",
+  "Al Kamil Wal Wafi": "الكامل والوافي",
+  "Jalan Bani Bu Ali": "جعلان بني بو علي",
+  Ibri: "عبري",
+  Yanqul: "ينقل",
+  Dhank: "ضنك",
+  "Al Buraimi": "البريمي",
+  Mahdah: "محضة",
+  "As Sunaynah": "السنينة",
+  Khasab: "خصب",
+  Bukha: "بخا",
+  Daba: "دباء",
+};
+
 const BUDGET_PRESETS = [
-  { label: "Under 10 OMR/day", min: 0, max: 10 },
-  { label: "10 – 20 OMR/day", min: 10, max: 20 },
-  { label: "20 – 30 OMR/day", min: 20, max: 30 },
-  { label: "30 – 45 OMR/day", min: 30, max: 45 },
-  { label: "45+ OMR/day", min: 45, max: Infinity },
+  {
+    min: 0,
+    max: 10,
+    label: { en: "Under 10 OMR/day", ar: "أقل من 10 ريال/يوم" },
+  },
+  {
+    min: 10,
+    max: 20,
+    label: { en: "10 – 20 OMR/day", ar: "10 – 20 ريال/يوم" },
+  },
+  {
+    min: 20,
+    max: 30,
+    label: { en: "20 – 30 OMR/day", ar: "20 – 30 ريال/يوم" },
+  },
+  {
+    min: 30,
+    max: 45,
+    label: { en: "30 – 45 OMR/day", ar: "30 – 45 ريال/يوم" },
+  },
+  { min: 45, max: Infinity, label: { en: "45+ OMR/day", ar: "+45 ريال/يوم" } },
 ];
 
 const FLEET = [
@@ -206,6 +286,28 @@ const FLEET = [
   },
 ];
 
+const UI = {
+  chooseMakeFirst: {
+    en: "Choose a make first to see its models.",
+    ar: "اختر الشركة المصنعة أولاً لعرض الموديلات.",
+  },
+  chooseGovFirst: {
+    en: "Choose a governorate first to see its wilayats.",
+    ar: "اختر المحافظة أولاً لعرض الولايات.",
+  },
+  carsAvailableOne: { en: "car available", ar: "سيارة متاحة" },
+  carsAvailableMany: { en: "cars available", ar: "سيارات متاحة" },
+  pricesShown: {
+    en: (days) => `Prices shown for a ${days}-day rental`,
+    ar: (days) => `الأسعار المعروضة لإيجار ${days} أيام`,
+  },
+  noMatch: {
+    en: "No cars match these filters yet. Clear one to see more of the fleet.",
+    ar: "لا توجد سيارات مطابقة لهذه الفلاتر بعد. امسح أحدها لعرض المزيد من الأسطول.",
+  },
+  omrDay: { en: "OMR/day", ar: "ريال/يوم" },
+};
+
 /* --------------------------------- pieces --------------------------------- */
 
 function Chip({ label, active, onClick, icon: Icon }) {
@@ -225,7 +327,7 @@ function Chip({ label, active, onClick, icon: Icon }) {
   );
 }
 
-function FilterTab({ tab, isActive, isFilled, onClick }) {
+function FilterTab({ tab, label, isActive, isFilled, onClick }) {
   const Icon = tab.icon;
   return (
     <button
@@ -245,7 +347,7 @@ function FilterTab({ tab, isActive, isFilled, onClick }) {
       >
         <Icon size={14} strokeWidth={2.25} />
       </span>
-      {tab.label}
+      {label}
       {isFilled && <span className="h-1.5 w-1.5 rounded-full bg-[#D9A441]" />}
       <ChevronDown
         size={14}
@@ -263,11 +365,15 @@ export default function Page() {
   const [activeKey, setActiveKey] = useState("bodyType");
   const [selections, setSelections] = useState({});
   const [type, setType] = useState("default");
+  const { lang, t } = useLanguage();
 
   // const searchParams = useSearchParams();
 
   const [days, setDays] = useState(3);
-  let lang = "en"; // or "ar" for Arabic
+  // let lang = "en"; // or "en" for English
+  const isAr = lang === "ar";
+  // const t = (obj) => (isAr ? obj.ar : obj.en);
+
   const filledKeys = useMemo(() => {
     const s = new Set();
     Object.keys(selections).forEach((k) => {
@@ -349,25 +455,25 @@ export default function Page() {
     },
   };
 
-  console.log("type", type);
   return (
-    <main className="min-h-screen bg-[#F5F0E4] font-sans">
+    <main
+      dir={isAr ? "rtl" : "ltr"}
+      className="min-h-screen bg-[#F5F0E4] font-sans"
+    >
       {/* hero strip */}
       <div className="border-b border-[#E4D9BF] bg-[#EFE6D2]">
         <div className="mx-auto max-w-6xl px-4 py-6">
           <h1 className="text-2xl font-extrabold tracking-tight text-[#1B1B18] sm:text-3xl">
-            {lang == "en"
-              ? (heading[type]?.heading?.en ??
-                heading["default"]["heading"]?.en)
-              : (heading[type]?.heading?.ar ??
-                heading["default"]["heading"]?.ar)}
+            {isAr
+              ? (heading[type]?.heading?.ar ?? heading["default"].heading.ar)
+              : (heading[type]?.heading?.en ?? heading["default"].heading.en)}
           </h1>
           <p className="mt-1 flex items-center gap-1.5 text-sm text-[#6B6455]">
-            {lang == "en"
-              ? (heading[type]?.sub_heading?.en ??
-                heading["default"]["sub_heading"]?.en)
-              : (heading[type]?.sub_heading?.ar ??
-                heading["default"]["sub_heading"]?.ar)}
+            {isAr
+              ? (heading[type]?.sub_heading?.ar ??
+                heading["default"].sub_heading.ar)
+              : (heading[type]?.sub_heading?.en ??
+                heading["default"].sub_heading.en)}
           </p>
         </div>
       </div>
@@ -379,6 +485,7 @@ export default function Page() {
             <FilterTab
               key={tab.key}
               tab={tab}
+              label={t(tab.label)}
               isActive={activeKey === tab.key}
               isFilled={filledKeys.has(tab.key)}
               onClick={() => selectTab(tab.key)}
@@ -395,14 +502,14 @@ export default function Page() {
               <div className="flex flex-wrap gap-2">
                 {BODY_TYPES.map((type) => (
                   <Chip
-                    key={type}
-                    label={type}
+                    key={type.en}
+                    label={t(type)}
                     icon={Car}
-                    active={selections.bodyType === type}
+                    active={selections.bodyType === type.en}
                     onClick={() =>
                       handleChange(
                         "bodyType",
-                        selections.bodyType === type ? undefined : type,
+                        selections.bodyType === type.en ? undefined : type.en,
                       )
                     }
                   />
@@ -453,7 +560,7 @@ export default function Page() {
                 </div>
               ) : (
                 <p className="flex items-center gap-2 text-sm text-[#8A8272]">
-                  <Tag size={14} /> Choose a make first to see its models.
+                  <Tag size={14} /> {t(UI.chooseMakeFirst)}
                 </p>
               ))}
 
@@ -465,8 +572,8 @@ export default function Page() {
                     selections.budget?.max === preset.max;
                   return (
                     <Chip
-                      key={preset.label}
-                      label={preset.label}
+                      key={preset.label.en}
+                      label={t(preset.label)}
                       icon={Wallet}
                       active={active}
                       onClick={() =>
@@ -488,7 +595,7 @@ export default function Page() {
                 {Object.keys(GOVERNORATE_WILAYATS).map((gov) => (
                   <Chip
                     key={gov}
-                    label={gov}
+                    label={isAr ? (GOVERNORATE_AR[gov] ?? gov) : gov}
                     icon={Map}
                     active={selections.governorate === gov}
                     onClick={() => {
@@ -512,7 +619,7 @@ export default function Page() {
                   {GOVERNORATE_WILAYATS[selections.governorate].map((w) => (
                     <Chip
                       key={w}
-                      label={w}
+                      label={isAr ? (WILAYAT_AR[w] ?? w) : w}
                       icon={MapPin}
                       active={selections.state === w}
                       onClick={() =>
@@ -526,8 +633,7 @@ export default function Page() {
                 </div>
               ) : (
                 <p className="flex items-center gap-2 text-sm text-[#8A8272]">
-                  <Map size={14} /> Choose a governorate first to see its
-                  wilayats.
+                  <Map size={14} /> {t(UI.chooseGovFirst)}
                 </p>
               ))}
           </div>
@@ -539,19 +645,28 @@ export default function Page() {
         <div className="mx-auto flex max-w-6xl flex-wrap gap-2 px-4 pt-3">
           {Array.from(filledKeys).map((key) => {
             const value = selections[key];
-            const text =
-              key === "budget" && value
-                ? `${value.min}–${value.max === Infinity ? "+" : value.max} OMR/day`
-                : String(value);
+            let text;
+            if (key === "budget" && value) {
+              text = `${value.min}–${value.max === Infinity ? "+" : value.max} ${t(UI.omrDay)}`;
+            } else if (key === "governorate" && value) {
+              text = isAr ? (GOVERNORATE_AR[value] ?? value) : value;
+            } else if (key === "state" && value) {
+              text = isAr ? (WILAYAT_AR[value] ?? value) : value;
+            } else if (key === "bodyType" && value) {
+              const bt = BODY_TYPES.find((b) => b.en === value);
+              text = bt ? t(bt) : value;
+            } else {
+              text = String(value);
+            }
             return (
               <span
                 key={key}
                 className="flex items-center gap-2 rounded-full bg-[#1B1B18] px-3 py-1 text-xs font-medium text-white"
               >
-                {LABELS[key]}: {text}
+                {t(LABELS[key])}: {text}
                 <button
                   onClick={() => clearFilter(key)}
-                  aria-label={`Clear ${LABELS[key]} filter`}
+                  aria-label={`Clear ${t(LABELS[key])} filter`}
                   className="text-white/50 hover:text-white"
                 >
                   <X size={12} />
@@ -566,24 +681,22 @@ export default function Page() {
       <div className="mx-auto max-w-6xl px-4 py-6">
         <div className="mb-4 flex items-baseline justify-between">
           <h2 className="text-base font-bold text-[#1B1B18]">
-            {filtered.length} {filtered.length === 1 ? "car" : "cars"} available
+            {filtered.length}{" "}
+            {filtered.length === 1
+              ? t(UI.carsAvailableOne)
+              : t(UI.carsAvailableMany)}
           </h2>
-          <p className="text-xs text-[#8A8272]">
-            Prices shown for a {days}-day rental
-          </p>
+          <p className="text-xs text-[#8A8272]">{t(UI.pricesShown)(days)}</p>
         </div>
 
         {filtered.length === 0 ? (
           <div className="flex flex-col items-center gap-2 rounded-2xl border border-dashed border-[#DDD3BE] bg-white p-10 text-center">
             <Car size={22} className="text-[#C1502E]" />
-            <p className="text-sm text-[#6B6455]">
-              No cars match these filters yet. Clear one to see more of the
-              fleet.
-            </p>
+            <p className="text-sm text-[#6B6455]">{t(UI.noMatch)}</p>
           </div>
         ) : (
           <>
-            <FeaturedCars />
+            <FeaturedCars lang={lang} />
           </>
         )}
       </div>

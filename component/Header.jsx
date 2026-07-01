@@ -3,19 +3,18 @@
 import { useState } from "react";
 import { Car, Languages, ChevronDown, Minus, Plus } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useLanguage } from "../context/LanguageContext";
 
 export const Header = ({ hiddenRoutes = [], onChangeLocation }) => {
   const pathname = usePathname();
 
-  const [lang, setLang] = useState("ar");
+  const { lang, dir, setLang, t } = useLanguage();
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [days, setDays] = useState(1);
 
   if (hiddenRoutes.includes(pathname)) return null;
 
   const isRTL = lang === "ar";
-
-  const t = (en, ar) => (isRTL ? ar : en);
 
   const changeLanguage = (language) => {
     setLang(language);
@@ -26,7 +25,7 @@ export const Header = ({ hiddenRoutes = [], onChangeLocation }) => {
 
   return (
     <header
-      dir={isRTL ? "rtl" : "ltr"}
+      dir={dir}
       className="sticky top-0 z-30 border-b border-[#2A2A24] bg-[#1B1B18] text-white"
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
@@ -37,13 +36,15 @@ export const Header = ({ hiddenRoutes = [], onChangeLocation }) => {
           </span>
 
           <div className={isRTL ? "text-right" : "text-left"}>
-            <h1 className="text-lg font-extrabold tracking-tight">{t("Sayara X", "سيارة X")}</h1>
-    
+            <h1 className="text-lg font-extrabold tracking-tight">
+              {t({ en: "Sayara X", ar: "سيارة X" })}
+            </h1>
+
             <p className="text-[10px] uppercase tracking-[0.2em] text-white/50">
-              {t(
-                "Self-drive rentals · Oman",
-                "تأجير سيارات ذاتي القيادة · عمان",
-              )}
+              {t({
+                en: "Self-drive rentals · Oman",
+                ar: "تأجير سيارات ذاتي القيادة · عمان",
+              })}
             </p>
           </div>
         </div>
@@ -94,7 +95,7 @@ export const Header = ({ hiddenRoutes = [], onChangeLocation }) => {
 
           {/* Sign In
           <button className="hidden rounded-full bg-[#D9A441] px-5 py-2 text-sm font-semibold text-[#1B1B18] transition hover:bg-[#e3b25c] sm:block">
-            {t("Sign In", "تسجيل الدخول")}
+            {t({ en: "Sign In", ar: "تسجيل الدخول" })}
           </button> */}
         </div>
       </div>
@@ -102,10 +103,10 @@ export const Header = ({ hiddenRoutes = [], onChangeLocation }) => {
       {/* Mobile Trip Length */}
       {/* <div
         className="flex items-center justify-center gap-3 border-t border-white/10 px-4 py-2 sm:hidden"
-        dir={isRTL ? "rtl" : "ltr"}
+        dir={dir}
       >
         <span className="text-sm text-white/60">
-          {t("Trip length", "مدة الرحلة")}
+          {t({ en: "Trip length", ar: "مدة الرحلة" })}
         </span>
 
         <button
@@ -116,7 +117,7 @@ export const Header = ({ hiddenRoutes = [], onChangeLocation }) => {
         </button>
 
         <span className="w-14 text-center font-semibold">
-          {days} {t("day", "يوم")}
+          {days} {t({ en: "day", ar: "يوم" })}
           {days > 1 ? "s" : ""}
         </span>
 
