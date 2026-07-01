@@ -68,3 +68,11 @@ button {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+html[dir="rtl"] {
+  direction: rtl;
+}
+
+html[dir="ltr"] {
+  direction: ltr;
+}
