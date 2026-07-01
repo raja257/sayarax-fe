@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import {
   Car,
   Tag,
@@ -262,6 +262,8 @@ function FilterTab({ tab, isActive, isFilled, onClick }) {
 export default function Page() {
   const [activeKey, setActiveKey] = useState("bodyType");
   const [selections, setSelections] = useState({});
+  const [type, setType] = useState("default");
+
   // const searchParams = useSearchParams();
 
   const [days, setDays] = useState(3);
@@ -305,11 +307,15 @@ export default function Page() {
     });
   }, [selections]);
 
+  useEffect(() => {
+    const data =
+      typeof window !== "undefined"
+        ? (new URLSearchParams(window.location.search).get("type") ?? "default")
+        : "default";
+
+    setType(data);
+  }, [type]);
   // const type = searchParams.get("type") ?? "default";
-  const type =
-  typeof window !== "undefined"
-    ? new URLSearchParams(window.location.search).get("type") ?? "default"
-    : "default";
   let heading = {
     air_port: {
       heading: {
