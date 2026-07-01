@@ -18,6 +18,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import FeaturedCars from "../component/FeaturedCars";
+import { useSearchParams } from "next/navigation";
 
 /* ---------------------------------- data ---------------------------------- */
 
@@ -261,8 +262,10 @@ function FilterTab({ tab, isActive, isFilled, onClick }) {
 export default function Page() {
   const [activeKey, setActiveKey] = useState("bodyType");
   const [selections, setSelections] = useState({});
-  const [days, setDays] = useState(3);
+  const searchParams = useSearchParams();
 
+  const [days, setDays] = useState(3);
+  let lang = "en"; // or "ar" for Arabic
   const filledKeys = useMemo(() => {
     const s = new Set();
     Object.keys(selections).forEach((k) => {
@@ -302,18 +305,59 @@ export default function Page() {
     });
   }, [selections]);
 
+  const type = searchParams.get("type") ?? "default";
+  let heading = {
+    air_port: {
+      heading: {
+        en: "Airport Car Rental",
+        ar: "تأجير السيارات من المطار",
+      },
+      sub_heading: {
+        en: "Reserve your car in advance and pick it up directly from the airport upon arrival.",
+        ar: "احجز سيارتك مسبقًا واستلمها مباشرةً من المطار عند وصولك.",
+      },
+    },
+    regular_book: {
+      heading: {
+        en: "Regular Car Rental",
+        ar: "تأجير السيارات",
+      },
+      sub_heading: {
+        en: "Choose your preferred pickup location, rental period, and drive with ease.",
+        ar: "اختر موقع الاستلام المفضل لديك، وحدد مدة الإيجار، وانطلق بكل سهولة.",
+      },
+    },
+    default: {
+      heading: {
+        en: "Regular Car Rental",
+        ar: "تأجير السيارات",
+      },
+      sub_heading: {
+        en: "Choose your preferred pickup location, rental period, and drive with ease.",
+        ar: "اختر موقع الاستلام المفضل لديك، وحدد مدة الإيجار، وانطلق بكل سهولة.",
+      },
+    },
+  };
+
+  console.log("type", type);
   return (
     <main className="min-h-screen bg-[#F5F0E4] font-sans">
       {/* hero strip */}
       <div className="border-b border-[#E4D9BF] bg-[#EFE6D2]">
         <div className="mx-auto max-w-6xl px-4 py-6">
           <h1 className="text-2xl font-extrabold tracking-tight text-[#1B1B18] sm:text-3xl">
-            Pick a car, pick your days, drive.
+            {lang == "en"
+              ? (heading[type]?.heading?.en ??
+                heading["default"]["heading"]?.en)
+              : (heading[type]?.heading?.ar ??
+                heading["default"]["heading"]?.ar)}
           </h1>
           <p className="mt-1 flex items-center gap-1.5 text-sm text-[#6B6455]">
-            <Search size={14} />
-            Filter the fleet below — every price updates for your {days}-day
-            trip.
+            {lang == "en"
+              ? (heading[type]?.sub_heading?.en ??
+                heading["default"]["sub_heading"]?.en)
+              : (heading[type]?.sub_heading?.ar ??
+                heading["default"]["sub_heading"]?.ar)}
           </p>
         </div>
       </div>

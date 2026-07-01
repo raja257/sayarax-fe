@@ -23,7 +23,7 @@ const options = [
       ar: "توصيل السيارة إلى المطار",
     },
     icon: PlaneLanding,
-    href: "/booking/airport",
+    href: "/options?type=air_port",
     image:
       "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=80",
   },
@@ -37,7 +37,7 @@ const options = [
       ar: "استلام من المعرض",
     },
     icon: Car,
-    href: "/booking/normal",
+    href: "/options?type=regular_book",
     image:
       "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=80",
   },
@@ -65,7 +65,7 @@ const options = [
       ar: "عروض تأجير طويلة المدى",
     },
     icon: CalendarDays,
-    href: "/booking/monthly",
+    href: "/options?type=monthly",
     image:
       "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=600&q=80",
   },
@@ -77,7 +77,7 @@ export default function BookingOptions() {
   const router = useRouter();
 
   const goToBooking = (href: string) => {
-    router.push(`options`);
+    router.push(href);
   };
   const lang = "ar"; // Replace with your language detection logic
   const t = (field:any) => (lang === "ar" ? field.ar : field.en);
