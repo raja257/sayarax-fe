@@ -102,65 +102,8 @@ const [activeTab, setActiveTab] = useState("exterior");
 const [currentExterior, setCurrentExterior] = useState(0);
 const [currentInterior, setCurrentInterior] = useState(0);
   return (
-    <section className="mt-4 px-1 bg-[#f9fafb] ">
-      {/* ── TOOLBAR ── */}
-      <div className="flex items-left justify-end mb-6 gap-3">
-        {/* LEFT: Filter icon button */}
-        <button className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm hover:bg-slate-50 transition-colors">
-          <Filter size={15} />
-          Filters
-        </button>
-
-        {/* RIGHT: Sort dropdown */}
-        <div className="relative">
-          <button
-            onClick={() => setSortOpen((v) => !v)}
-            className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm hover:bg-slate-50 transition-colors"
-          >
-            <ArrowUpDown size={15} className="text-slate-500" />
-            <span className="hidden sm:inline">{activeSortLabel}</span>
-            <span className="sm:hidden">Sort</span>
-            <ChevronDown
-              size={14}
-              className={`text-slate-400 transition-transform duration-200 ${
-                sortOpen ? "rotate-180" : ""
-              }`}
-            />
-          </button>
-
-          {sortOpen && (
-            <>
-              {/* backdrop */}
-              <div
-                className="fixed inset-0 z-10"
-                onClick={() => setSortOpen(false)}
-              />
-              {/* dropdown */}
-              <div className="absolute right-0 top-full mt-2 z-20 w-52 rounded-2xl border border-slate-200 bg-white shadow-lg overflow-hidden">
-                {SORT_OPTIONS.map((opt) => (
-                  <button
-                    key={opt.value}
-                    onClick={() => {
-                      setSortBy(opt.value);
-                      setSortOpen(false);
-                    }}
-                    className={`w-full flex items-center justify-between px-4 py-3 text-sm text-left transition-colors hover:bg-slate-50 ${
-                      sortBy === opt.value
-                        ? "text-blue-600 font-medium"
-                        : "text-slate-700"
-                    }`}
-                  >
-                    {opt.label}
-                    {sortBy === opt.value && (
-                      <Check size={14} className="text-blue-600 shrink-0" />
-                    )}
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      </div>
+    <section className="mt-4 px-1 ">
+    
 
       {/* ── CONTENT ── */}
       {viewMode === "grid" ? (

@@ -385,6 +385,7 @@ import {
   Search,
   ChevronDown,
 } from "lucide-react";
+import FeaturedCars from "../component/FeaturedCars";
 
 /* ---------------------------------- data ---------------------------------- */
 
@@ -546,70 +547,6 @@ export default function Page() {
 
   return (
     <main className="min-h-screen bg-[#F5F0E4] font-sans">
-      {/* header */}
-      <header className="sticky top-0 z-20 border-b border-[#2A2A24] bg-[#1B1B18] text-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#C1502E]">
-              <Car size={18} strokeWidth={2.5} />
-            </span>
-            <div className="leading-tight">
-              <p className="text-lg font-extrabold tracking-tight">Rihla</p>
-              <p className="text-[10px] uppercase tracking-[0.2em] text-white/50">
-                Self-drive rentals · Oman
-              </p>
-            </div>
-          </div>
-
-          <div className="hidden items-center gap-3 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-sm sm:flex">
-            <span className="text-white/60">Trip length</span>
-            <button
-              onClick={() => setDays((d) => Math.max(1, d - 1))}
-              className="flex h-6 w-6 items-center justify-center rounded-full bg-white/10 hover:bg-white/20"
-              aria-label="Decrease days"
-            >
-              <Minus size={13} />
-            </button>
-            <span className="w-14 text-center font-semibold">
-              {days} {days === 1 ? "day" : "days"}
-            </span>
-            <button
-              onClick={() => setDays((d) => Math.min(30, d + 1))}
-              className="flex h-6 w-6 items-center justify-center rounded-full bg-white/10 hover:bg-white/20"
-              aria-label="Increase days"
-            >
-              <Plus size={13} />
-            </button>
-          </div>
-
-          <button className="hidden rounded-full bg-[#D9A441] px-4 py-2 text-sm font-semibold text-[#1B1B18] hover:bg-[#e3b25c] sm:block">
-            Sign in
-          </button>
-        </div>
-
-        {/* mobile trip-length control */}
-        <div className="flex items-center justify-center gap-3 border-t border-white/10 px-4 py-2 text-sm sm:hidden">
-          <span className="text-white/60">Trip length</span>
-          <button
-            onClick={() => setDays((d) => Math.max(1, d - 1))}
-            className="flex h-6 w-6 items-center justify-center rounded-full bg-white/10"
-            aria-label="Decrease days"
-          >
-            <Minus size={13} />
-          </button>
-          <span className="w-14 text-center font-semibold">
-            {days} {days === 1 ? "day" : "days"}
-          </span>
-          <button
-            onClick={() => setDays((d) => Math.min(30, d + 1))}
-            className="flex h-6 w-6 items-center justify-center rounded-full bg-white/10"
-            aria-label="Increase days"
-          >
-            <Plus size={13} />
-          </button>
-        </div>
-      </header>
-
       {/* hero strip */}
       <div className="border-b border-[#E4D9BF] bg-[#EFE6D2]">
         <div className="mx-auto max-w-6xl px-4 py-6">
@@ -816,57 +753,11 @@ export default function Page() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((car) => {
-              const total = car.pricePerDay * days;
-              return (
-                <div
-                  key={car.id}
-                  className="group overflow-hidden rounded-2xl border border-[#E4D9BF] bg-white transition-shadow hover:shadow-lg hover:shadow-[#1B1B18]/5"
-                >
-                  <div className="relative flex h-36 items-center justify-center bg-[#F0EAD9]">
-                    <Car size={40} strokeWidth={1.5} className="text-[#C1502E]/40" />
-                    <span className="absolute left-3 top-3 rounded-full bg-[#1B1B18] px-2.5 py-1 text-[11px] font-semibold text-white">
-                      {car.year}
-                    </span>
-                  </div>
-                  <div className="p-4">
-                    <h3 className="font-bold text-[#1B1B18]">{car.title}</h3>
-                    <p className="mt-0.5 flex items-center gap-1 text-xs text-[#8A8272]">
-                      <MapPin size={12} /> {car.state}, {car.governorate}
-                    </p>
-
-                    <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-[#6B6455]">
-                      <span className="flex items-center gap-1">
-                        <Users size={13} /> {car.seats} seats
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Cog size={13} /> {car.transmission}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Fuel size={13} /> {car.fuel}
-                      </span>
-                    </div>
-
-                    <div className="mt-4 flex items-end justify-between border-t border-[#F0EAD9] pt-3">
-                      <div>
-                        <p className="text-[11px] text-[#8A8272]">
-                          {car.pricePerDay} OMR/day · {days} {days === 1 ? "day" : "days"}
-                        </p>
-                        <p className="text-lg font-extrabold text-[#1B1B18]">
-                          {total.toLocaleString()}{" "}
-                          <span className="text-xs font-semibold text-[#D9A441]">OMR total</span>
-                        </p>
-                      </div>
-                      <button className="rounded-full bg-[#C1502E] px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#a8451f]">
-                        Reserve
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+         
+              <>
+            <FeaturedCars />
+            </>
+         
         )}
       </div>
     </main>
