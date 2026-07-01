@@ -218,7 +218,6 @@
 //         </div>
 //       </section>
 
-      
 //       {/* FILTERS */}
 //       {selectedBody && (
 //         <section className="mt-8 px-5">
@@ -343,7 +342,6 @@
 //       {/* AVAILABLE CARS */}
 //       <section className="mt-8 px-5">
 //         {/* <div className="mb-3 flex items-center justify-between">
-          
 
 //           <button className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm shadow-sm">
 //             <Filter size={15} />
@@ -360,7 +358,6 @@
 //     </div>
 //   );
 // }
-
 
 // app/page.jsx
 // Single-file version: header, filter tabs, dynamic filter content, and listings.
@@ -407,9 +404,25 @@ const LABELS = {
   state: "Wilayat",
 };
 
-const BODY_TYPES = ["Sedan", "SUV", "Hatchback", "Pickup", "Coupe", "Van", "Convertible"];
+const BODY_TYPES = [
+  "Sedan",
+  "SUV",
+  "Hatchback",
+  "Pickup",
+  "Coupe",
+  "Van",
+  "Convertible",
+];
 
-const MAKES = ["Toyota", "Nissan", "Hyundai", "Kia", "Chevrolet", "Mitsubishi", "Ford"];
+const MAKES = [
+  "Toyota",
+  "Nissan",
+  "Hyundai",
+  "Kia",
+  "Chevrolet",
+  "Mitsubishi",
+  "Ford",
+];
 
 const MODELS_BY_MAKE = {
   Toyota: ["Land Cruiser", "Camry", "Corolla", "Hilux", "Fortuner", "Yaris"],
@@ -443,14 +456,118 @@ const BUDGET_PRESETS = [
 ];
 
 const FLEET = [
-  { id: "l1", title: "Toyota Land Cruiser GXR", make: "Toyota", model: "Land Cruiser", bodyType: "SUV", year: 2021, seats: 7, transmission: "Automatic", fuel: "Petrol", pricePerDay: 42, governorate: "Muscat", state: "Seeb" },
-  { id: "l2", title: "Nissan Altima SV", make: "Nissan", model: "Altima", bodyType: "Sedan", year: 2019, seats: 5, transmission: "Automatic", fuel: "Petrol", pricePerDay: 14, governorate: "Muscat", state: "Bawshar" },
-  { id: "l3", title: "Hyundai Tucson Limited", make: "Hyundai", model: "Tucson", bodyType: "SUV", year: 2020, seats: 5, transmission: "Automatic", fuel: "Petrol", pricePerDay: 21, governorate: "Al Batinah North", state: "Sohar" },
-  { id: "l4", title: "Toyota Hilux Double Cabin", make: "Toyota", model: "Hilux", bodyType: "Pickup", year: 2018, seats: 5, transmission: "Manual", fuel: "Diesel", pricePerDay: 19, governorate: "Dhofar", state: "Salalah" },
-  { id: "l5", title: "Kia Sportage EX", make: "Kia", model: "Sportage", bodyType: "SUV", year: 2022, seats: 5, transmission: "Automatic", fuel: "Petrol", pricePerDay: 24, governorate: "Al Dakhiliyah", state: "Nizwa" },
-  { id: "l6", title: "Chevrolet Malibu LT", make: "Chevrolet", model: "Malibu", bodyType: "Sedan", year: 2017, seats: 5, transmission: "Automatic", fuel: "Petrol", pricePerDay: 11, governorate: "Muscat", state: "Muttrah" },
-  { id: "l7", title: "Mitsubishi Pajero GLS", make: "Mitsubishi", model: "Pajero", bodyType: "SUV", year: 2020, seats: 7, transmission: "Automatic", fuel: "Diesel", pricePerDay: 27, governorate: "Al Buraimi", state: "Al Buraimi" },
-  { id: "l8", title: "Ford EcoSport Titanium", make: "Ford", model: "EcoSport", bodyType: "Hatchback", year: 2019, seats: 5, transmission: "Automatic", fuel: "Petrol", pricePerDay: 13, governorate: "Musandam", state: "Khasab" },
+  {
+    id: "l1",
+    title: "Toyota Land Cruiser GXR",
+    make: "Toyota",
+    model: "Land Cruiser",
+    bodyType: "SUV",
+    year: 2021,
+    seats: 7,
+    transmission: "Automatic",
+    fuel: "Petrol",
+    pricePerDay: 42,
+    governorate: "Muscat",
+    state: "Seeb",
+  },
+  {
+    id: "l2",
+    title: "Nissan Altima SV",
+    make: "Nissan",
+    model: "Altima",
+    bodyType: "Sedan",
+    year: 2019,
+    seats: 5,
+    transmission: "Automatic",
+    fuel: "Petrol",
+    pricePerDay: 14,
+    governorate: "Muscat",
+    state: "Bawshar",
+  },
+  {
+    id: "l3",
+    title: "Hyundai Tucson Limited",
+    make: "Hyundai",
+    model: "Tucson",
+    bodyType: "SUV",
+    year: 2020,
+    seats: 5,
+    transmission: "Automatic",
+    fuel: "Petrol",
+    pricePerDay: 21,
+    governorate: "Al Batinah North",
+    state: "Sohar",
+  },
+  {
+    id: "l4",
+    title: "Toyota Hilux Double Cabin",
+    make: "Toyota",
+    model: "Hilux",
+    bodyType: "Pickup",
+    year: 2018,
+    seats: 5,
+    transmission: "Manual",
+    fuel: "Diesel",
+    pricePerDay: 19,
+    governorate: "Dhofar",
+    state: "Salalah",
+  },
+  {
+    id: "l5",
+    title: "Kia Sportage EX",
+    make: "Kia",
+    model: "Sportage",
+    bodyType: "SUV",
+    year: 2022,
+    seats: 5,
+    transmission: "Automatic",
+    fuel: "Petrol",
+    pricePerDay: 24,
+    governorate: "Al Dakhiliyah",
+    state: "Nizwa",
+  },
+  {
+    id: "l6",
+    title: "Chevrolet Malibu LT",
+    make: "Chevrolet",
+    model: "Malibu",
+    bodyType: "Sedan",
+    year: 2017,
+    seats: 5,
+    transmission: "Automatic",
+    fuel: "Petrol",
+    pricePerDay: 11,
+    governorate: "Muscat",
+    state: "Muttrah",
+  },
+  {
+    id: "l7",
+    title: "Mitsubishi Pajero GLS",
+    make: "Mitsubishi",
+    model: "Pajero",
+    bodyType: "SUV",
+    year: 2020,
+    seats: 7,
+    transmission: "Automatic",
+    fuel: "Diesel",
+    pricePerDay: 27,
+    governorate: "Al Buraimi",
+    state: "Al Buraimi",
+  },
+  {
+    id: "l8",
+    title: "Ford EcoSport Titanium",
+    make: "Ford",
+    model: "EcoSport",
+    bodyType: "Hatchback",
+    year: 2019,
+    seats: 5,
+    transmission: "Automatic",
+    fuel: "Petrol",
+    pricePerDay: 13,
+    governorate: "Musandam",
+    state: "Khasab",
+  },
 ];
 
 /* --------------------------------- pieces --------------------------------- */
@@ -496,7 +613,9 @@ function FilterTab({ tab, isActive, isFilled, onClick }) {
       {isFilled && <span className="h-1.5 w-1.5 rounded-full bg-[#D9A441]" />}
       <ChevronDown
         size={14}
-        className={["transition-transform", isActive ? "rotate-180" : ""].join(" ")}
+        className={["transition-transform", isActive ? "rotate-180" : ""].join(
+          " ",
+        )}
       />
     </button>
   );
@@ -531,14 +650,17 @@ export default function Page() {
 
   const filtered = useMemo(() => {
     return FLEET.filter((l) => {
-      if (selections.bodyType && l.bodyType !== selections.bodyType) return false;
+      if (selections.bodyType && l.bodyType !== selections.bodyType)
+        return false;
       if (selections.make && l.make !== selections.make) return false;
       if (selections.model && l.model !== selections.model) return false;
-      if (selections.governorate && l.governorate !== selections.governorate) return false;
+      if (selections.governorate && l.governorate !== selections.governorate)
+        return false;
       if (selections.state && l.state !== selections.state) return false;
       if (
         selections.budget &&
-        (l.pricePerDay < selections.budget.min || l.pricePerDay > selections.budget.max)
+        (l.pricePerDay < selections.budget.min ||
+          l.pricePerDay > selections.budget.max)
       )
         return false;
       return true;
@@ -555,7 +677,8 @@ export default function Page() {
           </h1>
           <p className="mt-1 flex items-center gap-1.5 text-sm text-[#6B6455]">
             <Search size={14} />
-            Filter the fleet below — every price updates for your {days}-day trip.
+            Filter the fleet below — every price updates for your {days}-day
+            trip.
           </p>
         </div>
       </div>
@@ -588,7 +711,10 @@ export default function Page() {
                     icon={Car}
                     active={selections.bodyType === type}
                     onClick={() =>
-                      handleChange("bodyType", selections.bodyType === type ? undefined : type)
+                      handleChange(
+                        "bodyType",
+                        selections.bodyType === type ? undefined : type,
+                      )
                     }
                   />
                 ))}
@@ -605,8 +731,12 @@ export default function Page() {
                     active={selections.make === make}
                     onClick={() => {
                       const clearModel =
-                        selections.model && !MODELS_BY_MAKE[make]?.includes(selections.model);
-                      handleChange("make", selections.make === make ? undefined : make);
+                        selections.model &&
+                        !MODELS_BY_MAKE[make]?.includes(selections.model);
+                      handleChange(
+                        "make",
+                        selections.make === make ? undefined : make,
+                      );
                       if (clearModel) handleChange("model", undefined);
                     }}
                   />
@@ -624,7 +754,10 @@ export default function Page() {
                       icon={Layers}
                       active={selections.model === model}
                       onClick={() =>
-                        handleChange("model", selections.model === model ? undefined : model)
+                        handleChange(
+                          "model",
+                          selections.model === model ? undefined : model,
+                        )
                       }
                     />
                   ))}
@@ -650,7 +783,9 @@ export default function Page() {
                       onClick={() =>
                         handleChange(
                           "budget",
-                          active ? undefined : { min: preset.min, max: preset.max }
+                          active
+                            ? undefined
+                            : { min: preset.min, max: preset.max },
                         )
                       }
                     />
@@ -673,7 +808,7 @@ export default function Page() {
                         !GOVERNORATE_WILAYATS[gov]?.includes(selections.state);
                       handleChange(
                         "governorate",
-                        selections.governorate === gov ? undefined : gov
+                        selections.governorate === gov ? undefined : gov,
                       );
                       if (clearState) handleChange("state", undefined);
                     }}
@@ -692,14 +827,18 @@ export default function Page() {
                       icon={MapPin}
                       active={selections.state === w}
                       onClick={() =>
-                        handleChange("state", selections.state === w ? undefined : w)
+                        handleChange(
+                          "state",
+                          selections.state === w ? undefined : w,
+                        )
                       }
                     />
                   ))}
                 </div>
               ) : (
                 <p className="flex items-center gap-2 text-sm text-[#8A8272]">
-                  <Map size={14} /> Choose a governorate first to see its wilayats.
+                  <Map size={14} /> Choose a governorate first to see its
+                  wilayats.
                 </p>
               ))}
           </div>
@@ -749,15 +888,14 @@ export default function Page() {
           <div className="flex flex-col items-center gap-2 rounded-2xl border border-dashed border-[#DDD3BE] bg-white p-10 text-center">
             <Car size={22} className="text-[#C1502E]" />
             <p className="text-sm text-[#6B6455]">
-              No cars match these filters yet. Clear one to see more of the fleet.
+              No cars match these filters yet. Clear one to see more of the
+              fleet.
             </p>
           </div>
         ) : (
-         
-              <>
+          <>
             <FeaturedCars />
-            </>
-         
+          </>
         )}
       </div>
     </main>
