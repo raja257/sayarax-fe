@@ -55,20 +55,22 @@ export default function BottomTabsWrapper({
   if (shouldHide) return null;
 
   return (
-    <nav
-      className="fixed inset-x-0 bottom-0 z-20 border-t border-white/10 bg-[#1B1B18]"
-      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-    >
-      <div className="mx-auto grid max-w-md grid-cols-3">
-        {TABS.map((tab) => (
-          <BottomTab
-            key={tab.key}
-            icon={<tab.icon size={20} strokeWidth={2.25} />}
-            label={tab.label}
-            active={pathname === tab.href}
-          />
-        ))}
-      </div>
-    </nav>
-  );
+  <nav
+    className="fixed inset-x-0 bottom-0 z-20 border-t border-white/10 bg-[#1B1B18] pb-6"
+    style={{
+      paddingBottom: "calc(env(safe-area-inset-bottom) + 1rem)",
+    }}
+  >
+    <div className="mx-auto grid max-w-md grid-cols-3 pt-2">
+      {TABS.map((tab) => (
+        <BottomTab
+          key={tab.key}
+          icon={<tab.icon size={20} strokeWidth={2.25} />}
+          label={tab.label}
+          active={pathname === tab.href}
+        />
+      ))}
+    </div>
+  </nav>
+);
 }
