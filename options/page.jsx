@@ -262,7 +262,7 @@ function FilterTab({ tab, isActive, isFilled, onClick }) {
 export default function Page() {
   const [activeKey, setActiveKey] = useState("bodyType");
   const [selections, setSelections] = useState({});
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
 
   const [days, setDays] = useState(3);
   let lang = "en"; // or "ar" for Arabic
@@ -305,7 +305,11 @@ export default function Page() {
     });
   }, [selections]);
 
-  const type = searchParams.get("type") ?? "default";
+  // const type = searchParams.get("type") ?? "default";
+  const type =
+  typeof window !== "undefined"
+    ? new URLSearchParams(window.location.search).get("type") ?? "default"
+    : "default";
   let heading = {
     air_port: {
       heading: {
